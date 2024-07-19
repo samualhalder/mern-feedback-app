@@ -1,6 +1,6 @@
 import { Button, Label, TextInput } from "flowbite-react";
 import { FcGoogle } from "react-icons/fc";
-function SignUp() {
+function SignIn() {
   return (
     <div className="flex flex-col md:flex-row justify-around h-screen">
       {/* left */}
@@ -15,13 +15,7 @@ function SignUp() {
       {/* right */}
       <div className="md:w-[50%] p-5">
         <form className="h-full flex flex-col gap-4 justify-center items-center">
-          <h1 className="  text-3xl">Sign Up</h1>
-          <div className="w-[70%]">
-            <div className="mb-2 block">
-              <Label htmlFor="name" value="Your name" />
-            </div>
-            <TextInput id="name" type="text" placeholder="John Dow" required />
-          </div>
+          <h1 className="text-3xl">Sign In</h1>
           <div className="w-[70%]">
             <div className="mb-2 block">
               <Label htmlFor="email1" value="Your email" />
@@ -41,16 +35,16 @@ function SignUp() {
           </div>
 
           <Button type="submit" className="w-[70%]">
-            Sign Up
+            Sign In
           </Button>
           <Button className="w-[70%]" color={"red"}>
             <FcGoogle size={25} className="mx-4" />
             Continue with google
           </Button>
           <p>
-            already have an account?{" "}
-            <a href="/signin" className="text-blue-600 cursor-pointer">
-              Sign in
+            dont have an account?{" "}
+            <a href="/signup" className="text-blue-600 cursor-pointer">
+              Sign Up
             </a>
           </p>
         </form>
@@ -59,4 +53,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignIn;

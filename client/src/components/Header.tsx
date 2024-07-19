@@ -1,13 +1,13 @@
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { CiDark } from "react-icons/ci";
-import { Link } from "react-router-dom";
+
 function Header() {
   return (
     <div>
       <Navbar fluid rounded>
         <Navbar.Brand href="https://flowbite-react.com">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            FeetBack
+            FeedBack
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
