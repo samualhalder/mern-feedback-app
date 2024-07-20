@@ -37,7 +37,8 @@ function SignIn() {
           <Button type="submit" className="w-[70%]">
             Sign In
           </Button>
-          <Button className="w-[70%]" color={"red"}>
+          <h1>OR</h1>
+          <Button className="w-[70%]" color={"green"}>
             <FcGoogle size={25} className="mx-4" />
             Continue with google
           </Button>
