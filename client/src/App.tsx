@@ -6,7 +6,7 @@ import SignIn from "./pages/SingIn";
 
 function App() {
   return (
-    <>
+    <div className="dark:bg-gray-900">
       <Header></Header>
       <BrowserRouter>
         <Routes>
@@ -15,7 +15,7 @@ function App() {
           <Route path="/signin" element={<SignIn />}></Route>
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

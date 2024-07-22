@@ -1,7 +1,28 @@
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
-import { CiDark } from "react-icons/ci";
+import { useEffect, useState } from "react";
+import { CiDark, CiLight } from "react-icons/ci";
 
 function Header() {
+  const currtheme = localStorage.getItem("feed-back-theme");
+  const [theme, setTheme] = useState(currtheme);
+  const toggleTheme = () => {
+    const currTheme = localStorage.getItem("feed-back-theme");
+    if (currTheme === "dark") {
+      localStorage.setItem("feed-back-theme", "light");
+      setTheme("light");
+    } else {
+      localStorage.setItem("feed-back-theme", "dark");
+      setTheme("dark");
+    }
+  };
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
   return (
     <div>
       <Navbar fluid rounded>
@@ -11,8 +32,12 @@ function Header() {
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
-          <Button className="mx-5">
-            <CiDark className="text-xl"></CiDark>
+          <Button className="mx-5" onClick={toggleTheme}>
+            {theme === "light" ? (
+              <CiDark className="text-xl"></CiDark>
+            ) : (
+              <CiLight className="text-xl"></CiLight>
+            )}
           </Button>
           <a href="/signup">
             <Button className="mx-4">SignUp</Button>
