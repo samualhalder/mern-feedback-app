@@ -1,7 +1,9 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { ErrorResponse, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signInSuccesfull } from "../redux/user/userSlice";
 type Form = {
   email: string;
   password: string;
@@ -11,6 +13,8 @@ function SignIn() {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -27,6 +31,8 @@ function SignIn() {
       });
       const data = await response.json();
       if (response.ok) {
+        dispatch(signInSuccesfull(data));
+        console.log(currentUser);
         navigate("/");
       } else {
         setErrorMessage(data.errMessege);
@@ -36,7 +42,7 @@ function SignIn() {
       setErrorMessage(error.errMessege);
     }
   };
-
+  console.log(currentUser);
   return (
     <div className="flex flex-col md:flex-row justify-around h-screen">
       {/* left */}

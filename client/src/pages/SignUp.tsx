@@ -1,7 +1,8 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
-import React, { FormEvent, SyntheticEvent, useState } from "react";
+import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
-import { redirect, useNavigate } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 
 type From = {
   name?: string;
@@ -30,8 +31,8 @@ function SignUp() {
       });
       const data = await response.json();
 
+      setLoading(false);
       if (response.ok) {
-        setLoading(false);
         navigate("/signin");
       } else {
         setLoading(false);

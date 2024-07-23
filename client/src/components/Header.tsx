@@ -1,9 +1,11 @@
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { CiDark, CiLight } from "react-icons/ci";
+import { useSelector } from "react-redux";
 
 function Header() {
   const currtheme = localStorage.getItem("feed-back-theme");
+  const { currentUser } = useSelector((state) => state.user);
   const [theme, setTheme] = useState(currtheme);
   const toggleTheme = () => {
     const currTheme = localStorage.getItem("feed-back-theme");
@@ -39,9 +41,11 @@ function Header() {
               <CiLight className="text-xl"></CiLight>
             )}
           </Button>
-          <a href="/signup">
-            <Button className="mx-4 ">SignUp</Button>
-          </a>
+          {!currentUser && (
+            <a href="/signup">
+              <Button className="mx-4 ">SignUp</Button>
+            </a>
+          )}
 
           <Dropdown
             arrowIcon={false}
