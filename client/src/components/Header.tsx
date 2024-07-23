@@ -40,7 +40,7 @@ function Header() {
             )}
           </Button>
           <a href="/signup">
-            <Button className="mx-4">SignUp</Button>
+            <Button className="mx-4 ">SignUp</Button>
           </a>
 
           <Dropdown

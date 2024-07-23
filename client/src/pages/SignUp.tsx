@@ -51,8 +51,8 @@ function SignUp() {
     <div className="flex flex-col md:flex-row justify-around h-screen">
       {/* left */}
       <div className=" md:w-[50%] p-5 flex flex-col justify-center items-center">
-        <h1 className="text-3xl">Feedback</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="text-3xl dark:text-white">Feedback</h1>
+        <p className="text-sm text-gray-600 dark:text-gray-200">
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Modi, atque.
           Explicabo nostrum laboriosam eaque, ipsa quas beatae quo adipisci
           nesciunt?
@@ -64,7 +64,7 @@ function SignUp() {
           onSubmit={(e) => handleSubmit(e)}
           className="h-full flex flex-col gap-4 justify-center items-center"
         >
-          <h1 className="  text-3xl">Sign Up</h1>
+          <h1 className="  text-3xl dark:text-white">Sign Up</h1>
           <div className="w-[70%]">
             <div className="mb-2 block">
               <Label htmlFor="name" value="Your name" />
@@ -115,7 +115,7 @@ function SignUp() {
             <FcGoogle size={25} className="mx-4" />
             Continue with google
           </Button>
-          <p>
+          <p className="dark:text-white">
             already have an account?{" "}
             <a href="/signin" className="text-blue-600 cursor-pointer">
               Sign in
