@@ -4,6 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signInSuccesfull } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 type Form = {
   email: string;
   password: string;
@@ -93,11 +94,10 @@ function SignIn() {
               {errorMessage}
             </Alert>
           )}
-          <h1>OR</h1>
-          <Button className="w-[70%]" color={"green"}>
-            <FcGoogle size={25} className="mx-4" />
-            Continue with google
-          </Button>
+          <h1 className="dark:text-white">OR</h1>
+          <div className="w-[70%]">
+            <OAuth />
+          </div>
           <p className="dark:text-white">
             dont have an account?{" "}
             <a href="/signup" className="text-blue-600 cursor-pointer">

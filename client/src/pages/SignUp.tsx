@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 import { useNavigate } from "react-router-dom";
+import OAuth from "../components/OAuth";
 
 type From = {
   name?: string;
@@ -111,11 +112,10 @@ function SignUp() {
               {errorMessage}
             </Alert>
           )}
-          <h1>OR</h1>
-          <Button className="w-[70%]" color={"green"}>
-            <FcGoogle size={25} className="mx-4" />
-            Continue with google
-          </Button>
+          <h1 className="dark:text-white">OR</h1>
+          <div className="w-[70%]">
+            <OAuth />
+          </div>
           <p className="dark:text-white">
             already have an account?{" "}
             <a href="/signin" className="text-blue-600 cursor-pointer">
