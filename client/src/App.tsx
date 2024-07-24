@@ -6,7 +6,7 @@ import SignIn from "./pages/SingIn";
 
 function App() {
   return (
-    <div className="dark:bg-gray-900">
+    <div className="dark:bg-black">
       <Header></Header>
       <BrowserRouter>
         <Routes>

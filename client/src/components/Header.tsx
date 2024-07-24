@@ -26,8 +26,8 @@ function Header() {
     }
   }, [theme]);
   return (
-    <div>
-      <Navbar fluid rounded>
+    <div className=" ">
+      <Navbar fluid rounded className="dark:bg-black ">
         <Navbar.Brand href="https://flowbite-react.com">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             FeedBack
