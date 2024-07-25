@@ -43,7 +43,7 @@ export const signIn = async (req, res, next) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    console.log(user._doc);
+
     const { password: pass, ...rest } = user._doc;
 
     res
@@ -55,5 +55,58 @@ export const signIn = async (req, res, next) => {
       .json(rest);
   } catch (error) {
     return next(errorHandler(404, error.errmsg));
+  }
+};
+
+export const OAuth = async (req, res, next) => {
+  const { name, email, photoURL } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+      const { password: pass, ...rest } = user._doc;
+
+      res
+        .status(200)
+        .cookie("acesses_token", token, {
+          expires: new Date(Date.now() + 3600000),
+          httpOnly: true,
+        })
+        .json(rest);
+    } else {
+      let password = "";
+      const arrrey =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabckefghijklmnopqrstuvwxyz1234567890@#$%&";
+      for (let i = 0; i < 13; i++) {
+        const num = Math.round(Math.random() * 68);
+        password += arrrey[num];
+      }
+
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const tmpUser = {
+        password: hashedPassword,
+        email: email,
+        photoURL: photoURL,
+      };
+      const newUser = new User(tmpUser);
+      newUser
+        .save()
+        .then((result) => {
+          const token = jwt.sign({ id: result._id }, process.env.JWT_SECRET);
+
+          res
+            .status(200)
+            .cookie("acesses_token", token, {
+              expires: new Date(Date.now() + 3600000),
+              httpOnly: true,
+            })
+            .json({ name: result.name, email: result.email, id: result._id });
+        })
+        .catch((err) => next(errorHandler(400, err.errmsg)));
+    }
+  } catch (error) {
+    return next(errorHandler(400, error));
   }
 };
