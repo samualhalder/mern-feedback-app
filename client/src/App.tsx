@@ -7,8 +7,8 @@ import SignIn from "./pages/SingIn";
 function App() {
   return (
     <div className="dark:bg-black">
-      <Header></Header>
       <BrowserRouter>
+        <Header></Header>
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>

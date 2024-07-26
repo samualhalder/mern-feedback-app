@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
+//Sihnup
+
 export const signUp = async (req, res, next) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -24,6 +26,8 @@ export const signUp = async (req, res, next) => {
     .then(() => res.status(200).json("sign up succesfull"))
     .catch((err) => next(errorHandler(400, err.errmsg)));
 };
+
+//SignIn
 
 export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
@@ -58,6 +62,8 @@ export const signIn = async (req, res, next) => {
   }
 };
 
+// O-Auth
+
 export const OAuth = async (req, res, next) => {
   const { name, email, photoURL } = req.body;
 
@@ -83,9 +89,11 @@ export const OAuth = async (req, res, next) => {
         const num = Math.round(Math.random() * 68);
         password += arrrey[num];
       }
-
+      let username = name.toLowerCase().split(" ").join("");
+      username += Date.now();
       const hashedPassword = bcrypt.hashSync(password, 10);
       const tmpUser = {
+        username: username,
         password: hashedPassword,
         email: email,
         photoURL: photoURL,
@@ -95,14 +103,14 @@ export const OAuth = async (req, res, next) => {
         .save()
         .then((result) => {
           const token = jwt.sign({ id: result._id }, process.env.JWT_SECRET);
-
+          const { password: pass, ...rest } = result._doc;
           res
             .status(200)
             .cookie("acesses_token", token, {
               expires: new Date(Date.now() + 3600000),
               httpOnly: true,
             })
-            .json({ name: result.name, email: result.email, id: result._id });
+            .json(rest);
         })
         .catch((err) => next(errorHandler(400, err.errmsg)));
     }

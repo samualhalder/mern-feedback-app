@@ -33,7 +33,7 @@ function SignIn() {
       const data = await response.json();
       if (response.ok) {
         dispatch(signInSuccesfull(data));
-        console.log(currentUser);
+
         navigate("/");
       } else {
         setErrorMessage(data.errMessege);
@@ -43,7 +43,7 @@ function SignIn() {
       setErrorMessage(error.errMessege);
     }
   };
-  console.log(currentUser);
+
   return (
     <div className="flex flex-col md:flex-row justify-around h-screen">
       {/* left */}

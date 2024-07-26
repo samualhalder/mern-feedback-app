@@ -1,12 +1,16 @@
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { CiDark, CiLight } from "react-icons/ci";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "../redux/user/userSlice";
 
 function Header() {
   const currtheme = localStorage.getItem("feed-back-theme");
   const { currentUser } = useSelector((state) => state.user);
   const [theme, setTheme] = useState(currtheme);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const toggleTheme = () => {
     const currTheme = localStorage.getItem("feed-back-theme");
     if (currTheme === "dark") {
@@ -16,6 +20,11 @@ function Header() {
       localStorage.setItem("feed-back-theme", "dark");
       setTheme("dark");
     }
+  };
+
+  const handleSignOut = () => {
+    dispatch(signOut());
+    navigate("/signin");
   };
 
   useEffect(() => {
@@ -54,30 +63,30 @@ function Header() {
               label={
                 <Avatar
                   alt="User settings"
-                  img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                  img={currentUser?.photoURL}
                   rounded
                 />
               }
             >
               <Dropdown.Header>
-                <span className="block text-sm">Bonnie Green</span>
+                <span className="block text-sm">{currentUser?.username}</span>
                 <span className="block truncate text-sm font-medium">
-                  name@flowbite.com
+                  {currentUser?.email}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item>Profile</Dropdown.Item>
               <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item>Sign out</Dropdown.Item>
+              <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
             </Dropdown>
           )}
           <Navbar.Toggle />
         </div>
         <Navbar.Collapse>
-          <Navbar.Link href="#" active>
+          <Navbar.Link href="/" active>
             Home
           </Navbar.Link>
-          <Navbar.Link href="#">About</Navbar.Link>
+          <Navbar.Link href="">About</Navbar.Link>
           <Navbar.Link href="#">Services</Navbar.Link>
           <Navbar.Link href="#">Pricing</Navbar.Link>
           <Navbar.Link href="#">Contact</Navbar.Link>

@@ -8,9 +8,12 @@ const userSlice=createSlice({
     reducers:{
         signInSuccesfull:(state,action)=>{
             state.currentUser=action.payload
+        },
+        signOut:(state)=>{
+            state.currentUser=null
         }
     }
 })
 
-export const {signInSuccesfull}=userSlice.actions
+export const {signInSuccesfull,signOut}=userSlice.actions
 export default userSlice.reducer
