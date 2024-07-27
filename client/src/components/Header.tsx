@@ -7,6 +7,7 @@ import { signOut } from "../redux/user/userSlice";
 
 function Header() {
   const currtheme = localStorage.getItem("feed-back-theme");
+  const storedUser = localStorage.getItem("feedback-user");
   const { currentUser } = useSelector((state) => state.user);
   const [theme, setTheme] = useState(currtheme);
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Header() {
   };
 
   const handleSignOut = () => {
+    localStorage.removeItem("feedback-user");
     dispatch(signOut());
     navigate("/signin");
   };
@@ -74,7 +76,7 @@ function Header() {
                   {currentUser?.email}
                 </span>
               </Dropdown.Header>
-              <Dropdown.Item>Profile</Dropdown.Item>
+              <Dropdown.Item href="/profile">Profile</Dropdown.Item>
               <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
