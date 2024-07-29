@@ -30,7 +30,7 @@ function OAuth() {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("feedback-user", JSON.stringify(data));
+      localStorage.setItem("feedback-user", JSON.stringify(data));
         dispatch(signInSuccesfull(data));
         navigate("/");
       }
