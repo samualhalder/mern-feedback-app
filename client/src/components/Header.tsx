@@ -24,7 +24,7 @@ function Header() {
   };
 
   const handleSignOut = () => {
-    localStorage.removeItem("feedback-user");
+    // localStorage.removeItem("feedback-user");
     dispatch(signOut());
     navigate("/signin");
   };

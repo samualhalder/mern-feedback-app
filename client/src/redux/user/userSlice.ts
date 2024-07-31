@@ -8,9 +8,11 @@ const userSlice=createSlice({
     reducers:{
         signInSuccesfull:(state,action)=>{
             state.currentUser=action.payload
+            localStorage.setItem("feedback-user", JSON.stringify(action.payload));
         },
         signOut:(state)=>{
             state.currentUser=null
+            localStorage.removeItem("feedback-user");
         }
     }
 })
