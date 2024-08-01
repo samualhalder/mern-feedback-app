@@ -1,19 +1,24 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SingIn";
 import Profile from "./pages/Profile";
-import { useEffect } from "react";
+
 import { useDispatch } from "react-redux";
-import { signInSuccesfull } from "./redux/user/userSlice";
+import { signInSuccesfull, signOut } from "./redux/user/userSlice";
+import checkUser from "./redux/user/checkUser";
 
 function App() {
   const dispatch = useDispatch();
+
+  checkUser();
   const storedUser = localStorage.getItem("feedback-user");
-  useEffect(() => {
-    if (storedUser) dispatch(signInSuccesfull(JSON.parse(storedUser)));
-  }, []);
+  if (storedUser) dispatch(signInSuccesfull(JSON.parse(storedUser)));
+  else {
+    dispatch(signOut());
+  }
+
   return (
     <div className="dark:bg-black">
       <BrowserRouter>

@@ -1,12 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 import { CiMail } from "react-icons/ci";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
 
-import { Spinner, Toast } from "flowbite-react";
+import { FileInput, Spinner, Toast } from "flowbite-react";
 import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
 
 import { Button, TextInput } from "flowbite-react";
 import { signInSuccesfull } from "../redux/user/userSlice";
+import checkUser from "../redux/user/checkUser";
+import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -15,8 +17,27 @@ function Profile() {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({});
   const [showToast, setShowToast] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>();
+  const [imageFileURL, setImageFileURL] = useState<string | null>(null);
   const dispatch = useDispatch();
-  const ref = useRef();
+  const navigator = useNavigate();
+
+  // check user is valid or not
+  useEffect(() => {
+    const user = localStorage.getItem("feedback-user");
+    if (!user) {
+      navigator("/signin");
+    }
+  }, []);
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setImageFile(e.target.files[0]);
+      const url = URL.createObjectURL(e.target.files[0]);
+      setImageFileURL(url);
+    }
+  };
+  console.log(imageFile);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -43,30 +64,31 @@ function Profile() {
           dispatch(signInSuccesfull(data));
         } else {
           setError(data.errMessege);
-          setLoading(false);
         }
+        setLoading(false);
       };
       fetchingFunction();
       setShowForm((pre) => !pre);
     } catch (error) {
-      console.log(error);
       setLoading(false);
       setError(error);
       setShowForm((pre) => !pre);
     }
   };
-  console.log(formData);
 
   return (
     <div className="h-screen flex flex-col md:flex-row dark:text-white">
       {/* left */}
       <div className="flex flex-col items-center gap-5 border-2 border-cyan-500 rounded-md md:w-[30%] m-4">
         <h1 className="text-5xl dark:text-white mx-auto my-3">Profile</h1>
-        <img
-          className="h-[100px] rounded-full overflow-hidden"
-          src={currentUser?.photoURL}
-          alt="image"
-        />
+        <div>
+          <img
+            className="h-[100px] w-[100px] rounded-full overflow-hidden border-4"
+            src={imageFileURL || currentUser?.photoURL}
+            alt="image"
+          />
+        </div>
+
         <p>@{currentUser?.username}</p>
         <p className="items-center">
           <CiMail className="inline-block self-center m-3" />
@@ -89,6 +111,13 @@ function Profile() {
               onChange={(e) => handleChange(e)}
               placeholder="new password"
             ></TextInput>
+            {showForm && (
+              <FileInput
+                accept="image/*"
+                onChange={handlePhotoChange}
+                helperText="SVG, PNG, JPG or GIF (MAX SIZE 2MB)."
+              />
+            )}
           </form>
         )}
         {!showForm && (

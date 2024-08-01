@@ -4,6 +4,18 @@ import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 //Sihnup
+export const checkUser = async (req, res, next) => {
+  const token = req.cookies.acesses_token;
+  if (!token) {
+    return next(errorHandler(400, "no such user."));
+  }
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return next(errorHandler(400, err));
+    }
+    res.status(200).json(user);
+  });
+};
 
 export const signUp = async (req, res, next) => {
   const { name, email, password } = req.body;
