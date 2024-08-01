@@ -1,14 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
 import { CiMail } from "react-icons/ci";
-import { ChangeEvent, LegacyRef, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { FileInput, Spinner, Toast } from "flowbite-react";
-import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
+import { Alert, FileInput, Spinner, Toast } from "flowbite-react";
+import { HiCheck, HiX } from "react-icons/hi";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 import { Button, TextInput } from "flowbite-react";
 import { signInSuccesfull } from "../redux/user/userSlice";
-import checkUser from "../redux/user/checkUser";
+
 import { useNavigate } from "react-router-dom";
+import { app } from "../firebase";
+import { CircularProgressbar } from "react-circular-progressbar";
 
 function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -19,6 +27,13 @@ function Profile() {
   const [showToast, setShowToast] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>();
   const [imageFileURL, setImageFileURL] = useState<string | null>(null);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [fileTransferError, setFileTransferError] = useState<string | null>(
+    null
+  );
+  const [fileTransferPersantage, setFileTransferPersantage] = useState<
+    number | null
+  >(null);
   const dispatch = useDispatch();
   const navigator = useNavigate();
 
@@ -37,7 +52,6 @@ function Profile() {
       setImageFileURL(url);
     }
   };
-  console.log(imageFile);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -76,16 +90,84 @@ function Profile() {
     }
   };
 
+  useEffect(() => {
+    if (imageFile) {
+      uploadImage();
+    }
+  }, [imageFile]);
+  useEffect(() => {
+    setFormData({ ...formData, photoURL: imageFileURL });
+  }, [imageFileURL]);
+
+  const uploadImage = async () => {
+    setPhotoUploading(true);
+    setFileTransferError(null);
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + imageFile.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress: number =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFileTransferPersantage(+progress.toFixed(0));
+      },
+      (error) => {
+        setFileTransferError(
+          "Could not upload the image (size may be more than 2 MB )"
+        );
+        setFileTransferPersantage(null);
+        setImageFile(null);
+        setImageFileURL(null);
+        setPhotoUploading(false);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageFileURL(downloadURL);
+          setFormData({ ...formData, photoURL: downloadURL });
+          setFileTransferPersantage(null);
+          setPhotoUploading(false);
+        });
+      }
+    );
+  };
+
   return (
-    <div className="h-screen flex flex-col md:flex-row dark:text-white">
+    <div className="min-h-screen flex flex-col md:flex-row dark:text-white">
       {/* left */}
-      <div className="flex flex-col items-center gap-5 border-2 border-cyan-500 rounded-md md:w-[30%] m-4">
+      <div className="flex flex-col items-center gap-5 border-2 border-cyan-500 rounded-md md:w-[30%] m-4 p-3">
         <h1 className="text-5xl dark:text-white mx-auto my-3">Profile</h1>
-        <div>
+        <div className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full">
+          {fileTransferPersantage && (
+            <CircularProgressbar
+              value={fileTransferPersantage || 0}
+              text={`${fileTransferPersantage}%`}
+              strokeWidth={5}
+              styles={{
+                root: {
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                },
+                path: {
+                  stroke: `rgba(62, 152, 199, ${fileTransferPersantage / 100})`,
+                },
+              }}
+            />
+          )}
           <img
-            className="h-[100px] w-[100px] rounded-full overflow-hidden border-4"
-            src={imageFileURL || currentUser?.photoURL}
-            alt="image"
+            src={imageFileURL || currentUser.photoURL}
+            alt="user"
+            className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
+              fileTransferPersantage &&
+              fileTransferPersantage < 100 &&
+              "opacity-60"
+            }`}
           />
         </div>
 
@@ -111,12 +193,15 @@ function Profile() {
               onChange={(e) => handleChange(e)}
               placeholder="new password"
             ></TextInput>
-            {showForm && (
-              <FileInput
-                accept="image/*"
-                onChange={handlePhotoChange}
-                helperText="SVG, PNG, JPG or GIF (MAX SIZE 2MB)."
-              />
+
+            <FileInput
+              accept="image/*"
+              onChange={handlePhotoChange}
+              helperText="SVG, PNG, JPG or GIF (MAX SIZE 2MB)."
+            />
+
+            {fileTransferError && (
+              <Alert color={"failure"}>{fileTransferError}</Alert>
             )}
           </form>
         )}
