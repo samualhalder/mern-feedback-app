@@ -46,3 +46,15 @@ export const editUser = async (req, res, next) => {
       res.status(400).json("internel setver error.");
     });
 };
+
+export const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.userId) {
+    return next(
+      errorHandler(400, "You are not allowed to delete this account.")
+    );
+  }
+
+  User.findOneAndDelete({ _id: req.user.id })
+    .then((data) => res.status(200).json("user id deleted."))
+    .catch((err) => next(errorHandler(400, err)));
+};

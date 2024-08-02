@@ -2,8 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { CiMail } from "react-icons/ci";
 import { useEffect, useState } from "react";
 
-import { Alert, FileInput, Spinner, Toast } from "flowbite-react";
-import { HiCheck, HiX } from "react-icons/hi";
+import { Alert, FileInput, Modal, Spinner, Toast } from "flowbite-react";
+import { HiCheck, HiX, HiOutlineExclamationCircle } from "react-icons/hi";
 import {
   getDownloadURL,
   getStorage,
@@ -12,11 +12,12 @@ import {
 } from "firebase/storage";
 
 import { Button, TextInput } from "flowbite-react";
-import { signInSuccesfull } from "../redux/user/userSlice";
+import { signInSuccesfull, signOut } from "../redux/user/userSlice";
 
 import { useNavigate } from "react-router-dom";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
+import ProfileRightBar from "../components/ProfileRightBar";
 
 function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -34,6 +35,7 @@ function Profile() {
   const [fileTransferPersantage, setFileTransferPersantage] = useState<
     number | null
   >(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigator = useNavigate();
 
@@ -133,11 +135,56 @@ function Profile() {
     );
   };
 
+  const deleteHandler = async () => {
+    try {
+      const response = await fetch(`/api/user/deleteUser/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (response.ok) {
+        dispatch(signOut());
+        localStorage.removeItem("feedback-user");
+        navigator("/signin");
+      } else {
+        setError(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row dark:text-white">
       {/* left */}
       <div className="flex flex-col items-center gap-5 border-2 border-cyan-500 rounded-md md:w-[30%] m-4 p-3">
         <h1 className="text-5xl dark:text-white mx-auto my-3">Profile</h1>
+        {openModal && (
+          <Modal
+            show={openModal}
+            size="md"
+            onClose={() => setOpenModal(false)}
+            popup
+          >
+            <Modal.Header />
+            <Modal.Body>
+              <div className="text-center">
+                <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                  Are you sure you want to{" "}
+                  <span className="text-red-500">delete</span> this account?
+                </h3>
+                <div className="flex justify-center gap-4">
+                  <Button color="failure" onClick={deleteHandler}>
+                    {"Yes, I'm sure"}
+                  </Button>
+                  <Button color="gray" onClick={() => setOpenModal(false)}>
+                    No, cancel
+                  </Button>
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
+        )}
         <div className="relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full">
           {fileTransferPersantage && (
             <CircularProgressbar
@@ -161,7 +208,7 @@ function Profile() {
             />
           )}
           <img
-            src={imageFileURL || currentUser.photoURL}
+            src={imageFileURL || currentUser?.photoURL}
             alt="user"
             className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] ${
               fileTransferPersantage &&
@@ -220,6 +267,14 @@ function Profile() {
             </Button>
           )}
         </div>
+        {showForm && (
+          <div
+            className="text-red-700 cursor-pointer"
+            onClick={() => setOpenModal((pre) => !pre)}
+          >
+            delete account ?
+          </div>
+        )}
         {showToast && (
           <Toast>
             <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
@@ -242,8 +297,8 @@ function Profile() {
         )}
       </div>
       {/* right */}
-      <div>
-        <p>its side bar</p>
+      <div className="border-2 border-cyan-500 rounded-md  md:w-full m-4 p-3">
+        <ProfileRightBar />
       </div>
     </div>
   );
