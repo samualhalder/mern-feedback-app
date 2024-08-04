@@ -1,31 +1,74 @@
-import {
-  Button,
-  Checkbox,
-  Datepicker,
-  HR,
-  Label,
-  Select,
-  TextInput,
-} from "flowbite-react";
+import { Button, Checkbox, HR, Label, Select, TextInput } from "flowbite-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+type formDataType = {
+  firstName: string;
+  secondName: string;
+  gender: string;
+  ageGroup: string;
+  profession: string;
+  region: string;
+  marriageStatus: string;
+  politicalView: string;
+  religion: string;
+};
 
 function ProfileRightBar() {
-  const [date, setdate] = useState(new Date().toLocaleDateString());
-  console.log(date);
+  const { currentUser } = useSelector((state) => state.user);
 
+  const [formData, setFormData] = useState<formDataType>({
+    firstName: "",
+    secondName: "",
+    gender: "male",
+    ageGroup: "<10",
+    profession: "student",
+    region: "asia",
+    marriageStatus: "married",
+    politicalView: "nodata",
+    religion: "atheist",
+  });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`/api/user/updateUser/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("succes", data);
+      } else {
+        console.log("failure", data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="dark:text-white flex flex-col">
       <div className="mx-auto">
         <h1 className="mx-auto  text-5xl">Additional Information</h1>
         <p className="">please fill all the fields to give your feedbacks.</p>
       </div>
-      <form className="mt-5 p-5">
+      <form onSubmit={(e) => handleSubmit(e)} className="mt-5 p-5">
         <div className="flex flex-col lg:flex-row justify-around items-center my-10">
           <div>
             <Label>your first name</Label>
             <TextInput
               className="mt-1"
               size={30}
+              required
+              id="firstName"
+              onChange={(e) => handleChange(e)}
               style={{
                 width: "250px",
               }}
@@ -35,7 +78,10 @@ function ProfileRightBar() {
             <Label>your second name</Label>
             <TextInput
               className="mt-1"
+              onChange={(e) => handleChange(e)}
+              required
               size={30}
+              id="secondName"
               style={{
                 width: "250px",
               }}
@@ -46,15 +92,17 @@ function ProfileRightBar() {
             <Select
               className="mt-1"
               id="gender"
+              defaultValue={"male"}
+              onChange={(e) => handleChange(e)}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
-              <option>Male</option>
-              <option>Female</option>
-              <option>Others</option>
+              <option value={"male"}>Male</option>
+              <option value={"female"}>Female</option>
+              <option value={"others"}>Others</option>
             </Select>
           </div>
         </div>
@@ -64,107 +112,123 @@ function ProfileRightBar() {
             <Label>age group</Label>
             <Select
               className="mt-1"
-              id="gender"
+              onChange={(e) => handleChange(e)}
+              id="ageGroup"
+              defaultValue={"<10"}
               style={{
                 width: "250px",
               }}
               required
             >
-              <option>{"<10"}</option>
-              <option>{"11-20"}</option>
-              <option>{"21-40"}</option>
-              <option>{">40"}</option>
+              <option value={"<10"}>{"<10"}</option>
+              <option value={"10-20"}>{"10-20"}</option>
+              <option value={"21-40"}>{"21-40"}</option>
+              <option value={">40"}>{">40"}</option>
             </Select>
           </div>
           <div>
             <Label>profession</Label>
             <Select
               className="mt-1"
-              id="gender"
+              onChange={(e) => handleChange(e)}
+              id="profession"
+              defaultValue={"student"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
-              <option>Student</option>
-              <option>job seeker</option>
-              <option>Corporate</option>
-              <option>Government service</option>
-              <option>Bussiness</option>
-              <option>Self employed</option>
-              <option>Solical media creator</option>
-              <option>Others</option>
+              <option value={"student"}>Student</option>
+              <option value={"job seeker"}>job seeker</option>
+              <option value={"corporate"}>Corporate</option>
+              <option value={"govt employee"}>Government service</option>
+              <option value={"business"}>Bussiness</option>
+              <option value={"self employed"}>Self employed</option>
+              <option value={"solcial media creator"}>
+                Solical media creator
+              </option>
+              <option value={"onthers"}>Others</option>
             </Select>
           </div>
           <div>
-            <Label>Rigion</Label>
+            <Label>Region</Label>
             <Select
               className="mt-1"
-              id="gender"
+              onChange={(e) => handleChange(e)}
+              id="region"
+              defaultValue={"asia"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
-              <option>Asia</option>
-              <option>Europe</option>
-              <option>Africa</option>
-              <option>America</option>
+              <option value={"asia"}>Asia</option>
+              <option value={"europe"}>Europe</option>
+              <option value={"africa"}>Africa</option>
+              <option value={"america"}>America</option>
             </Select>
           </div>
         </div>
         <HR />
         <div className="flex flex-col lg:flex-row  justify-around items-center my-10">
           <div>
-            <Label>Marage Status</Label>
+            <Label>Marriage Status</Label>
             <Select
               className="mt-1"
-              id="gender"
+              onChange={(e) => handleChange(e)}
+              id="marriageStatus"
+              defaultValue={"married"}
               style={{
                 width: "250px",
               }}
               required
             >
-              <option>Maried</option>
-              <option>Divorce</option>
-              <option>Single</option>
+              <option value={"married"}>Married</option>
+              <option value={"divorced"}>Divorced</option>
+              <option value={"unmarried"}>Unmarried</option>
+              <option value={"widow"}>Widow</option>
             </Select>
           </div>
           <div>
-            <Label>Poletical View</Label>
+            <Label>Political View</Label>
             <Select
               className="mt-1"
-              id="gender"
+              onChange={(e) => handleChange(e)}
+              id="politicalView"
+              defaultValue={"nodata"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
-              <option>Left</option>
-              <option>Right</option>
-              <option>Center</option>
-              <option>Dont want to share</option>
+              <option value={"nodata"}>Dont want to share</option>
+              <option value={"left"}>Left</option>
+              <option value={"right"}>Right</option>
+              <option value={"center"}>Center</option>
             </Select>
           </div>
           <div>
             <Label>Relagion</Label>
             <Select
               className="mt-1"
-              id="gender"
+              onChange={(e) => handleChange(e)}
+              id="relagion"
+              defaultValue={"atheist"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
-              <option>Hindu</option>
-              <option>Muslim</option>
-              <option>Chistian</option>
-              <option>Sikh</option>
-              <option>Atheist</option>
+              <option value={"atheist"}>Atheist</option>
+              <option value={"hindu"}>Hindu</option>
+              <option value={"muslim"}>Muslim</option>
+              <option value={"christianity"}>Christianity</option>
+              <option value={"sikh"}>Sikh</option>
+              <option value={"other"}>Other</option>
             </Select>
           </div>
         </div>
@@ -174,7 +238,7 @@ function ProfileRightBar() {
           <Label className="mx-2">I am ready to share my data.</Label>
         </div>
         <div className="mt-5 flex justify-center">
-          <Button>Submit</Button>
+          <Button type="submit">Submit</Button>
         </div>
       </form>
     </div>

@@ -2,6 +2,8 @@ import { errorHandler } from "../../utils/error.js";
 import { User } from "../models/user.model.js";
 import bcrypt from "bcrypt";
 export const editUser = async (req, res, next) => {
+  console.log(req.body);
+
   if (req.user.id !== req.params.id) {
     return next(errorHandler(400, "you are not allowed to edit profile."));
   }
@@ -29,6 +31,16 @@ export const editUser = async (req, res, next) => {
     }
   }
 
+  // firstName: string;
+  // secondName: string;
+  // gender: string;
+  // ageGroup: string;
+  // profession: string;
+  // region: string;
+  // marriageStatus: string;
+  // politicalView: string;
+  // religion: string;
+
   User.findOneAndUpdate(
     { _id: req.user.id },
     {
@@ -37,6 +49,15 @@ export const editUser = async (req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         photoURL: req.body.photoURL,
+        firstName: req.body.firstName,
+        secondName: req.body.secondName,
+        gender: req.body.gender,
+        ageGroup: req.body.ageGroup,
+        profession: req.body.profession,
+        region: req.body.region,
+        marriageStatus: req.body.region,
+        politicalView: req.body.politicalView,
+        religion: req.body.region,
       },
     },
     { new: true }
