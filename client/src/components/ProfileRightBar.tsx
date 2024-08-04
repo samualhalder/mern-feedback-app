@@ -1,4 +1,12 @@
-import { Button, Checkbox, HR, Label, Select, TextInput } from "flowbite-react";
+import {
+  Button,
+  Checkbox,
+  HR,
+  Label,
+  Select,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 type formDataType = {
@@ -15,6 +23,7 @@ type formDataType = {
 
 function ProfileRightBar() {
   const { currentUser } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [formData, setFormData] = useState<formDataType>({
     firstName: "",
@@ -35,6 +44,7 @@ function ProfileRightBar() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await fetch(`/api/user/updateUser/${currentUser._id}`, {
         method: "POST",
@@ -49,8 +59,10 @@ function ProfileRightBar() {
       } else {
         console.log("failure", data);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
   return (
@@ -238,7 +250,9 @@ function ProfileRightBar() {
           <Label className="mx-2">I am ready to share my data.</Label>
         </div>
         <div className="mt-5 flex justify-center">
-          <Button type="submit">Submit</Button>
+          <Button type="submit">
+            {loading ? <Spinner></Spinner> : "Submit"}
+          </Button>
         </div>
       </form>
     </div>
