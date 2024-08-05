@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import { useDispatch } from "react-redux";
 import { signInSuccesfull, signOut } from "./redux/user/userSlice";
 import checkUser from "./redux/user/checkUser";
+import DashBoard from "./pages/DashBoard";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function App() {
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/dashboard" element={<DashBoard />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

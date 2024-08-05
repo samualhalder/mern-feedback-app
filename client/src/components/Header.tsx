@@ -39,9 +39,10 @@ function Header() {
   return (
     <div className=" ">
       <Navbar fluid rounded className="dark:bg-black ">
-        <Navbar.Brand href="https://flowbite-react.com">
+        <Navbar.Brand href="/">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            FeedBack
+            FeedBack{" "}
+            <span className=" bg-[#FE9903] px-2 py-1 rounded-lg">hub</span>
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
@@ -77,7 +78,7 @@ function Header() {
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/profile">Profile</Dropdown.Item>
-              <Dropdown.Item>Dashboard</Dropdown.Item>
+              <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
             </Dropdown>

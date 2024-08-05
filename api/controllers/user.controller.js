@@ -31,16 +31,6 @@ export const editUser = async (req, res, next) => {
     }
   }
 
-  // firstName: string;
-  // secondName: string;
-  // gender: string;
-  // ageGroup: string;
-  // profession: string;
-  // region: string;
-  // marriageStatus: string;
-  // politicalView: string;
-  // religion: string;
-
   User.findOneAndUpdate(
     { _id: req.user.id },
     {

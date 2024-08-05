@@ -57,7 +57,6 @@ function ProfileRightBar() {
       setLoading(false);
     }
   };
-  console.log(formData);
 
   return (
     <div className="dark:text-white flex flex-col">
