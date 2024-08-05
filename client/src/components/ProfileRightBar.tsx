@@ -10,32 +10,23 @@ import {
 import { useState } from "react";
 import { useSelector } from "react-redux";
 type formDataType = {
-  firstName: string;
-  secondName: string;
-  gender: string;
-  ageGroup: string;
-  profession: string;
-  region: string;
-  marriageStatus: string;
-  politicalView: string;
-  religion: string;
+  firstName?: string;
+  secondName?: string;
+  gender?: string;
+  ageGroup?: string;
+  profession?: string;
+  region?: string;
+  marriageStatus?: string;
+  politicalView?: string;
+  religion?: string;
 };
 
 function ProfileRightBar() {
   const { currentUser } = useSelector((state) => state.user);
   const [loading, setLoading] = useState<boolean>(false);
+  const [termAgred, setTermAgred] = useState<boolean>(false);
 
-  const [formData, setFormData] = useState<formDataType>({
-    firstName: "",
-    secondName: "",
-    gender: "male",
-    ageGroup: "<10",
-    profession: "student",
-    region: "asia",
-    marriageStatus: "married",
-    politicalView: "nodata",
-    religion: "atheist",
-  });
+  const [formData, setFormData] = useState<formDataType>({});
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -43,6 +34,7 @@ function ProfileRightBar() {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    if (!termAgred) return;
     e.preventDefault();
     setLoading(true);
     try {
@@ -65,6 +57,8 @@ function ProfileRightBar() {
       setLoading(false);
     }
   };
+  console.log(formData);
+
   return (
     <div className="dark:text-white flex flex-col">
       <div className="mx-auto">
@@ -104,7 +98,6 @@ function ProfileRightBar() {
             <Select
               className="mt-1"
               id="gender"
-              defaultValue={"male"}
               onChange={(e) => handleChange(e)}
               sizing={30}
               style={{
@@ -112,6 +105,7 @@ function ProfileRightBar() {
               }}
               required
             >
+              <option>Chose one</option>
               <option value={"male"}>Male</option>
               <option value={"female"}>Female</option>
               <option value={"others"}>Others</option>
@@ -126,12 +120,12 @@ function ProfileRightBar() {
               className="mt-1"
               onChange={(e) => handleChange(e)}
               id="ageGroup"
-              defaultValue={"<10"}
               style={{
                 width: "250px",
               }}
               required
             >
+              <option>Chose one</option>
               <option value={"<10"}>{"<10"}</option>
               <option value={"10-20"}>{"10-20"}</option>
               <option value={"21-40"}>{"21-40"}</option>
@@ -144,13 +138,13 @@ function ProfileRightBar() {
               className="mt-1"
               onChange={(e) => handleChange(e)}
               id="profession"
-              defaultValue={"student"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
+              <option>Chose one</option>
               <option value={"student"}>Student</option>
               <option value={"job seeker"}>job seeker</option>
               <option value={"corporate"}>Corporate</option>
@@ -169,13 +163,13 @@ function ProfileRightBar() {
               className="mt-1"
               onChange={(e) => handleChange(e)}
               id="region"
-              defaultValue={"asia"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
+              <option>Chose one</option>
               <option value={"asia"}>Asia</option>
               <option value={"europe"}>Europe</option>
               <option value={"africa"}>Africa</option>
@@ -191,12 +185,12 @@ function ProfileRightBar() {
               className="mt-1"
               onChange={(e) => handleChange(e)}
               id="marriageStatus"
-              defaultValue={"married"}
               style={{
                 width: "250px",
               }}
               required
             >
+              <option>Chose one</option>
               <option value={"married"}>Married</option>
               <option value={"divorced"}>Divorced</option>
               <option value={"unmarried"}>Unmarried</option>
@@ -209,13 +203,13 @@ function ProfileRightBar() {
               className="mt-1"
               onChange={(e) => handleChange(e)}
               id="politicalView"
-              defaultValue={"nodata"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
+              <option>Chose one</option>
               <option value={"nodata"}>Dont want to share</option>
               <option value={"left"}>Left</option>
               <option value={"right"}>Right</option>
@@ -228,13 +222,13 @@ function ProfileRightBar() {
               className="mt-1"
               onChange={(e) => handleChange(e)}
               id="relagion"
-              defaultValue={"atheist"}
               sizing={30}
               style={{
                 width: "250px",
               }}
               required
             >
+              <option>Chose one</option>
               <option value={"atheist"}>Atheist</option>
               <option value={"hindu"}>Hindu</option>
               <option value={"muslim"}>Muslim</option>
@@ -246,11 +240,14 @@ function ProfileRightBar() {
         </div>
         <HR />
         <div>
-          <Checkbox />
+          <Checkbox
+            checked={termAgred}
+            onChange={() => setTermAgred((pre) => !pre)}
+          />
           <Label className="mx-2">I am ready to share my data.</Label>
         </div>
         <div className="mt-5 flex justify-center">
-          <Button type="submit">
+          <Button type="submit" disabled={!termAgred || loading}>
             {loading ? <Spinner></Spinner> : "Submit"}
           </Button>
         </div>

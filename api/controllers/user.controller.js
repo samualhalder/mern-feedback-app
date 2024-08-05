@@ -55,9 +55,9 @@ export const editUser = async (req, res, next) => {
         ageGroup: req.body.ageGroup,
         profession: req.body.profession,
         region: req.body.region,
-        marriageStatus: req.body.region,
+        marriageStatus: req.body.marriageStatus,
         politicalView: req.body.politicalView,
-        religion: req.body.region,
+        religion: req.body.religion,
       },
     },
     { new: true }
