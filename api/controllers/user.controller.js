@@ -48,7 +48,7 @@ export const editUser = async (req, res, next) => {
         username: req.body.username,
         email: req.body.email,
         password: req.body.password,
-        photoURL: req.body.photoURL,
+        photoURL: req.body?.photoURL,
         firstName: req.body.firstName,
         secondName: req.body.secondName,
         gender: req.body.gender,

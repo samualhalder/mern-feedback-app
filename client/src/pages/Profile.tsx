@@ -100,6 +100,7 @@ function Profile() {
   useEffect(() => {
     setFormData({ ...formData, photoURL: imageFileURL });
   }, [imageFileURL]);
+  console.log(formData);
 
   const uploadImage = async () => {
     setPhotoUploading(true);
