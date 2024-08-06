@@ -1,17 +1,30 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiInbox, HiChartPie, HiViewBoards, HiUser } from "react-icons/hi";
-import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { signOut } from "../redux/user/userSlice";
 
 function DashLeftSIdeBar() {
   const [tab, setTab] = useState<string | null>("");
+  const { currentUser } = useSelector((state) => state.user);
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    localStorage.removeItem("feedback-user");
+    dispatch(signOut());
+  };
 
   useEffect(() => {
+    if (!currentUser) {
+      navigate("/");
+    }
     const params = new URLSearchParams(location.search);
     const tabValue = params.get("tab");
     setTab(tabValue);
-  }, [location.search]);
+  }, [location.search, dispatch, currentUser, navigate]);
   console.log(tab);
   return (
     <div className="md:min-h-screen dark:text-white dark:bg-black">
@@ -33,9 +46,11 @@ function DashLeftSIdeBar() {
               </Sidebar.Item>
             </Sidebar.ItemGroup>
             <Sidebar.ItemGroup className="dark:bg-black">
-              <Sidebar.Item href="#" icon={HiChartPie}>
-                Sign Out
-              </Sidebar.Item>
+              <div onClick={handleSignOut}>
+                <Sidebar.Item href="#" icon={HiChartPie}>
+                  Sign Out
+                </Sidebar.Item>
+              </div>
             </Sidebar.ItemGroup>
           </Sidebar.Items>
         </Sidebar>
