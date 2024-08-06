@@ -42,7 +42,9 @@ function Header() {
         <Navbar.Brand href="/">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             FeedBack{" "}
-            <span className=" bg-[#FE9903] px-2 py-1 rounded-lg">hub</span>
+            <span className=" bg-[#FE9903] px-2 py-1 rounded-md text-black">
+              hub
+            </span>
           </span>
         </Navbar.Brand>
         <div className="flex md:order-2">
