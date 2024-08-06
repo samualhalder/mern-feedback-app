@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import DashLeftSIdeBar from "../components/DashLeftSIdeBar";
 import { useLocation } from "react-router-dom";
+import DashCreatePost from "./DashCreatePost";
+import DashAllPosts from "./DashAllPosts";
+import DashAllFeedbacks from "./DashAllFeedbacks";
+import DashStatistics from "./DashStatistics";
 
 function DashBoard() {
   const [tab, setTab] = useState<string | null>("");
@@ -14,11 +18,16 @@ function DashBoard() {
   console.log(tab);
 
   return (
-    <div className="min-h-screen dark:text-white flex ">
-      <div className="w-[30%] ">
+    <div className="min-h-screen dark:text-white flex flex-col sm:flex-row">
+      <div className="md:w-[30%] ">
         <DashLeftSIdeBar />
       </div>
-      <div>RightSideBar</div>
+      <div className="md:w-[70%]">
+        {tab === "create-post" ? <DashCreatePost /> : null}
+        {tab === "all-posts" ? <DashAllPosts /> : null}
+        {tab === "all-feedbacks" ? <DashAllFeedbacks /> : null}
+        {tab === "statistics" ? <DashStatistics /> : null}
+      </div>
     </div>
   );
 }
