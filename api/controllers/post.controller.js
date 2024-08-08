@@ -10,11 +10,18 @@ import { errorHandler } from "../../utils/error.js";
 import Post from "../models/post.model.js";
 
 export const createPost = (req, res, next) => {
-  const user = req.user.id;
-  const { userId, title, description, link, photoURL, questions, mode } =
-    req.body;
-  if (!userId || !title || !description || !mode) {
-    return next(errorHandler(400, "pls put all required fields"));
+  console.log("hit", req.body);
+
+  const userId = req.user.id;
+  console.log(req.user);
+
+  console.log(userId);
+
+  const { title, description, link, photoURL, questions, mode } = req.body;
+  console.log(title, description, link, questions);
+
+  if (!userId || !title || !description) {
+    return next(errorHandler(400, "pls put all required fields bsdk"));
   }
   const newPost = {
     userId,

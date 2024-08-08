@@ -12,7 +12,7 @@ function AddQst({
   };
 }) {
   const [question, setQuestion] = useState<string>("");
-  const [isEditing, setIsEditing] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState<number | null>(null);
 
   const addQuestion = () => {
     if (isEditing) {
@@ -23,19 +23,19 @@ function AddQst({
       setIsEditing(null);
     } else {
       const newQst: qs = {
-        id: new Date().toLocaleString(),
+        id: Date.now(),
         question: question,
       };
       params.setQsArrey([...params.qsArrey, newQst]);
     }
     setQuestion("");
   };
-  const handleEdit = (id: string) => {
+  const handleEdit = (id: number) => {
     setIsEditing(id);
     const editedQuestion = params.qsArrey.filter((qs) => qs.id === id);
     setQuestion(editedQuestion[0].question);
   };
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     const index = params.qsArrey.findIndex((elm) => elm.id === id);
     params.qsArrey.splice(index, 1);
     params.setQsArrey([...params.qsArrey]);
