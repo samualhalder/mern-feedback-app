@@ -56,8 +56,8 @@ function Header() {
             )}
           </Button>
           {!currentUser && (
-            <a href="/signup">
-              <Button className="mx-4 ">SignUp</Button>
+            <a href="/signin">
+              <Button className="mx-4 ">Sign In</Button>
             </a>
           )}
 
