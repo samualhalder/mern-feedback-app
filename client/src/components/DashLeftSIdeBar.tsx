@@ -1,6 +1,9 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiInbox, HiChartPie, HiViewBoards, HiUser } from "react-icons/hi";
+import { IoMdAdd, IoMdList } from "react-icons/io";
+import { MdFeedback } from "react-icons/md";
+import { SiGoogleanalytics } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "../redux/user/userSlice";
@@ -27,25 +30,41 @@ function DashLeftSIdeBar() {
   }, [location.search, dispatch, currentUser, navigate]);
   console.log(tab);
   return (
-    <div className="md:min-h-screen dark:text-white dark:bg-black">
-      <div className="dark:bg-black">
-        <Sidebar className=" dark:bg-black w-full">
-          <Sidebar.Items className="dark:bg-black md:min-h-screen ">
-            <Sidebar.ItemGroup className="h-full dark:bg-black">
-              <Sidebar.Item href="/dashboard?tab=create-post" icon={HiChartPie}>
+    <div className="md:min-h-screen dark:text-white ">
+      <div className="">
+        <Sidebar className=" w-full">
+          <Sidebar.Items className=" md:min-h-screen ">
+            <Sidebar.ItemGroup className="h-full ">
+              <Sidebar.Item
+                active={tab === null}
+                href="/dashboard"
+                icon={IoMdAdd}
+              >
                 New Post
               </Sidebar.Item>
-              <Sidebar.Item href="/dashboard?tab=all-posts" icon={HiViewBoards}>
+              <Sidebar.Item
+                active={tab === "all-posts"}
+                href="/dashboard?tab=all-posts"
+                icon={IoMdList}
+              >
                 All Posts
               </Sidebar.Item>
-              <Sidebar.Item href="/dashboard?tab=all-feedbacks" icon={HiInbox}>
+              <Sidebar.Item
+                active={tab === "all-feedbacks"}
+                href="/dashboard?tab=all-feedbacks"
+                icon={MdFeedback}
+              >
                 FeedBacks
               </Sidebar.Item>
-              <Sidebar.Item href="dashboard?tab=statistics" icon={HiUser}>
-                Stats
+              <Sidebar.Item
+                active={tab === "analytics"}
+                href="dashboard?tab=analytics"
+                icon={SiGoogleanalytics}
+              >
+                Analytics
               </Sidebar.Item>
             </Sidebar.ItemGroup>
-            <Sidebar.ItemGroup className="dark:bg-black">
+            <Sidebar.ItemGroup className="">
               <div onClick={handleSignOut}>
                 <Sidebar.Item href="#" icon={HiChartPie}>
                   Sign Out

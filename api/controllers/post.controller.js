@@ -6,6 +6,7 @@
 // questions: { type: Array, length: { max: 5 } },
 // mode: { type: String },
 
+import { json } from "express";
 import { errorHandler } from "../../utils/error.js";
 import Post from "../models/post.model.js";
 
@@ -39,4 +40,19 @@ export const createPost = (req, res, next) => {
       res.status(200).json({ msg: "post created succesfully", post: data })
     )
     .catch((err) => res.status(400).json(err));
+};
+
+export const getAllPosts = async (req, res, next) => {
+  const userId = req.user.id;
+  const { order, limit } = req.body;
+  try {
+    const totalDocuments = await Post.find({ userId }).countDocuments();
+    const result = await Post.find({ userId: userId })
+      .sort({ createdAt: order === "newest" ? -1 : 1 })
+      .limit(limit);
+
+    res.status(200).json({ posts: result, totalDocuments });
+  } catch (err) {
+    return next(errorHandler(400, err));
+  }
 };

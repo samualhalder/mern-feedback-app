@@ -19,14 +19,14 @@ function DashBoard() {
 
   return (
     <div className="min-h-screen dark:text-white flex flex-col sm:flex-row">
-      <div className="md:w-[30%] ">
+      <div className="h-[100%] md:w-[30%] ">
         <DashLeftSIdeBar />
       </div>
       <div className="md:w-[70%]">
-        {tab === "create-post" ? <DashCreatePost /> : null}
+        {tab === null ? <DashCreatePost /> : null}
         {tab === "all-posts" ? <DashAllPosts /> : null}
         {tab === "all-feedbacks" ? <DashAllFeedbacks /> : null}
-        {tab === "statistics" ? <DashStatistics /> : null}
+        {tab === "analytics" ? <DashStatistics /> : null}
       </div>
     </div>
   );
