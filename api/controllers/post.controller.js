@@ -44,7 +44,7 @@ export const createPost = (req, res, next) => {
 
 export const getAllPosts = async (req, res, next) => {
   const userId = req.user.id;
-  const { order, limit } = req.body;
+  const { order, limit } = req.query;
   try {
     const totalDocuments = await Post.find({ userId }).countDocuments();
     const result = await Post.find({ userId: userId })
