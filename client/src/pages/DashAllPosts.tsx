@@ -19,13 +19,13 @@ function DashAllPosts() {
     };
     fetchPost();
   }, [order]);
-  console.log(allPosts);
+
   return (
     <div className="flex flex-col">
       <div className="mx-auto text-5xl">All Posts</div>
       <div className="flex justify-around items-center">
         <p className="text-white border-2 bg-[#1F2937] p-5 m-4 text-lg rounded-lg">
-          Total Posts: {allPosts && allPosts.totalDocuments}
+          Total Posts: {allPosts.length}
         </p>
         <Select
           className="border-2 bg-[#1F2937] p-4 bd m-4  rounded-lg"

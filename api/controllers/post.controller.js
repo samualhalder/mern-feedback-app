@@ -56,3 +56,17 @@ export const getAllPosts = async (req, res, next) => {
     return next(errorHandler(400, err));
   }
 };
+
+export const postById = async (req, res, next) => {
+  const { postId } = req.params;
+  try {
+    const post = await Post.findById({ _id: postId });
+    if (!post) {
+      return next(errorHandler(400, "no such post is avilable."));
+    } else {
+      res.status(200).json(post);
+    }
+  } catch (error) {
+    return next(errorHandler(400, error.errmsg));
+  }
+};

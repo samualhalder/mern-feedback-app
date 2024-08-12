@@ -1,11 +1,3 @@
-// userId: { type: String, require: true },
-//     title: { type: String, require: true, length: { min: 4 } },
-//     description: { type: String, require: true, length: { min: 1 } },
-//     link: { type: String },
-//     photoURL: { type: String },
-//     questions: { type: Array, length: { max: 5 } },
-//     mode: { type: String, require: true },
-
 import { useState } from "react";
 
 export type postType = {
