@@ -33,7 +33,10 @@ function App() {
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/dashboard" element={<DashBoard />}></Route>
           <Route path="/post/:postId" element={<Post />}></Route>
-          <Route path="/*" element={<PageNotFound />}></Route>
+          <Route
+            path="/*"
+            element={<PageNotFound message="Page Not Found" />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </div>
