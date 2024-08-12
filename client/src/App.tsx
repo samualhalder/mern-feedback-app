@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { signInSuccesfull, signOut } from "./redux/user/userSlice";
 import checkUser from "./redux/user/checkUser";
 import DashBoard from "./pages/DashBoard";
+import Post from "./pages/Post";
+import PageNotFound from "./pages/PageNotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +32,8 @@ function App() {
           <Route path="/signin" element={<SignIn />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
           <Route path="/dashboard" element={<DashBoard />}></Route>
+          <Route path="/post/:postId" element={<Post />}></Route>
+          <Route path="/*" element={<PageNotFound />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
