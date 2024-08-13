@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export type postType = {
+  _id?: string;
   userId: string;
   title: string;
   description: string;

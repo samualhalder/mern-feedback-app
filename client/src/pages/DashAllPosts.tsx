@@ -1,6 +1,7 @@
 import { Select } from "flowbite-react";
 import { useEffect, useState } from "react";
 import PostCard, { postType } from "../components/PostCard";
+import { Link } from "react-router-dom";
 
 function DashAllPosts() {
   const [allPosts, setallPosts] = useState<postType[]>([]);
@@ -37,9 +38,9 @@ function DashAllPosts() {
       </div>
       <div className="flex flex-col justify-center items-center">
         {allPosts.map((elm, ind) => (
-          <div key={ind}>
+          <Link to={`/post/${elm._id}`} key={ind}>
             <PostCard post={elm} />
-          </div>
+          </Link>
         ))}
       </div>
     </div>
