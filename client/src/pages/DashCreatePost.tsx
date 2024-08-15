@@ -19,6 +19,8 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export type qs = {
   id: number;
@@ -27,13 +29,17 @@ export type qs = {
 
 export type formDataType = {
   title: string;
+  username?: string;
   description: string;
   link: string;
   photoURL: string;
   mode: "public" | "private";
   questions: qs[];
 };
+
 function DashCreatePost() {
+  const navigator = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
   const [qsArrey, setQsArrey] = useState<qs[]>([]);
   const [formUploading, setFormUploading] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
@@ -45,14 +51,13 @@ function DashCreatePost() {
   >(null);
   const [formData, setFormData] = useState<formDataType>({
     title: "",
+    username: currentUser.username,
     description: "",
     link: "",
     photoURL: "",
     mode: "public",
     questions: qsArrey,
   });
-
-  
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageFileURL, setImageFileURL] = useState<string>("");
@@ -84,7 +89,6 @@ function DashCreatePost() {
         setFileTransferError(
           "Could not upload the image (size may be more than 2 MB )"
         );
-        
 
         setFileTransferPersantage(null);
         setImageFile(null);
@@ -101,7 +105,6 @@ function DashCreatePost() {
       }
     );
   };
-  
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -122,6 +125,7 @@ function DashCreatePost() {
       });
       const data = await response.json();
       if (response.ok) {
+        navigator(`/post/${data._id}`);
         console.log(data);
       } else {
         console.log(response);
@@ -175,7 +179,7 @@ function DashCreatePost() {
             <TextInput name="link" onChange={(e) => handleChange(e)} />
           </div>
           {imageFileURL && (
-            <div className="flex justify-center m-4 relative">
+            <div className="flex justify-center m-4 relative h-[500px]">
               <img src={imageFileURL} alt="image" />
               {fileTransferPersantage && fileTransferPersantage > 0 && (
                 <div className="flex justify-center items-center absolute text-5xl ">

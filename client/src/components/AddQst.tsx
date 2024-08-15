@@ -58,7 +58,7 @@ function AddQst({
         {params.qsArrey.map((qs, ind) => (
           <div
             key={ind}
-            className="text-xl flex justify-between border-2 border-cyan-200 p-4 m-2 rounded-3xl"
+            className="text-xl flex flex-col md:flex-row gap-1 justify-between border-2 border-cyan-200 p-4 m-2 rounded-3xl"
           >
             <p>{qs.question}</p>
             <div className="flex gap-2 ">

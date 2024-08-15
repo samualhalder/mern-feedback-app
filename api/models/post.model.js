@@ -3,6 +3,7 @@ import mongoose, { Schema } from "mongoose";
 const postSchema = new Schema(
   {
     userId: { type: String, require: true },
+    username: { type: String },
     title: { type: String, require: true, length: { min: 4 } },
     description: { type: String, require: true, length: { min: 1 } },
     link: { type: String },

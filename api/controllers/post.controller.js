@@ -18,7 +18,8 @@ export const createPost = (req, res, next) => {
 
   console.log(userId);
 
-  const { title, description, link, photoURL, questions, mode } = req.body;
+  const { title, description, link, photoURL, questions, mode, username } =
+    req.body;
   console.log(title, description, link, questions);
 
   if (!userId || !title || !description) {
@@ -26,6 +27,7 @@ export const createPost = (req, res, next) => {
   }
   const newPost = {
     userId,
+    username,
     title,
     description,
     link,

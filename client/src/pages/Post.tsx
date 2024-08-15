@@ -2,12 +2,25 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { postType } from "../components/PostCard";
 import { TfiDirection } from "react-icons/tfi";
-import { Button, Label, Spinner, Textarea } from "flowbite-react";
+import { Button, HR, Label, Rating, Spinner, Textarea } from "flowbite-react";
+import { useSelector } from "react-redux";
 
 function Post() {
   const { postId } = useParams();
+  const { currentUser } = useSelector((state) => state.user);
+
   const [post, setPost] = useState<postType | null>(null);
-  const [rating, setRating] = useState(0);
+  console.log(currentUser, post);
+
+  const [stars, setstars] = useState([
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+  ]);
+  const [rating, setRating] = useState(1);
+
   useEffect(() => {
     const fetchPost = async () => {
       const response = await fetch(`/api/post/get-one-post/${postId}`);
@@ -20,7 +33,6 @@ function Post() {
     };
     fetchPost();
   }, [postId]);
-  console.log(post);
 
   if (post == null) {
     return (
@@ -30,10 +42,15 @@ function Post() {
     );
   } else {
     return (
-      <div className="min-h-screen dark:text-white flex flex-col items-center gap-6">
+      <div className="min-h-screen dark:text-white flex flex-col items-center gap-6 p-4">
         <h1 className=" text-4xl ">{post?.title}</h1>
-        <p className="text-lg">{post?.description}</p>
-        <div className="h-[400px] w-[full] md:w-[500px] p-3">
+        <div>
+          <p>{new Date(post.createdAt).toLocaleDateString()}</p>
+          <p>{post.username}</p>
+        </div>
+        <HR />
+        <p className="text-lg w-full md:w-[700px]">{post?.description}</p>
+        <div className="h-[400px] w-[full] md:w-[700px] p-3">
           <img
             className="h-full w-full flex justify-center items-center"
             src={post.photoURL}
@@ -44,22 +61,63 @@ function Post() {
           <a
             className=" block text-blue-500 hover:text-blue-300 text-lg"
             href={post?.link}
+            target="_new"
           >
             for informations visit here.
             <TfiDirection className="inline mx-5" />
           </a>
         </Button>
-        <div className="flex flex-col">
-          <Label className=" text-md mx-auto my-2">rate this product</Label>
-          // TODO have TO create Rating giving system
-        </div>
-        <div className="m-5">
-          <Label>Your feedback</Label>
-          <Textarea className="w-[400px] md:w-[500px]" rows={4} />
-        </div>
-        {post.questions.map((e, ind) => {
-          return <p key={ind}>{e.question}</p>;
-        })}
+        {post.userId !== currentUser._id && (
+          <section className="flex flex-col  justify-center items-center gap-3">
+            <div className="flex flex-col">
+              <Label className=" text-md mx-auto my-2">rate this product</Label>
+
+              <Rating size="lg">
+                {stars.map((elm) => (
+                  <Rating.Star
+                    filled={elm.id <= rating}
+                    onClick={() => setRating(elm.id)}
+                  />
+                ))}
+              </Rating>
+            </div>
+            <div className="w-full md:w-[700px]">
+              <Label>Your feedback</Label>
+              <Textarea
+                className="w-full md:w-[700px]"
+                rows={4}
+                placeholder="write your openion/feedback here"
+              />
+            </div>
+            {post.questions && <h1>please answare this questions</h1>}
+            {post.questions.map((e, ind) => (
+              <div className="w-full md:w-[700px]">
+                <p key={ind}>{e.question}</p>
+                <Textarea
+                  className="mt-1"
+                  placeholder="write your answear for this question."
+                ></Textarea>
+              </div>
+            ))}
+            <Button>Submit</Button>
+          </section>
+        )}
+        {post.userId === currentUser._id && (
+          <div className="w-full md:w-[700px] flex flex-col items-center justify-center">
+            <h1 className="text-xl font-bold">Questions</h1>
+            <div className="w-full">
+              {post.questions.map((elm) => (
+                <p
+                  key={elm.id}
+                  className="text-lg border-2 border-cyan-300 p-2 m-2 rounded-xl"
+                >
+                  {elm.question}
+                </p>
+              ))}
+            </div>
+            <Button>Edit Post</Button>
+          </div>
+        )}
       </div>
     );
   }

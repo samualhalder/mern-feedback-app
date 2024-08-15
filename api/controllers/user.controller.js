@@ -69,3 +69,19 @@ export const deleteUser = async (req, res, next) => {
     .then((data) => res.status(200).json("user id deleted."))
     .catch((err) => next(errorHandler(400, err)));
 };
+
+export const findUserById = async (req, res, next) => {
+  const { userId } = req.params;
+  console.log("hit", req.params.emailuserId);
+
+  try {
+    const user = await User.findById({ _id: req.params.userId });
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      return next(errorHandler(400, "no user found."));
+    }
+  } catch (err) {
+    return next(errorHandler(400, err));
+  }
+};
