@@ -7,7 +7,7 @@ export type postType = {
   description: string;
   link: string;
   photoURL: string;
-  questions: [];
+  questions: string[];
   mode: string;
   createdAt: Date;
 };
@@ -18,12 +18,8 @@ function PostCard({ post }: { post: postType }) {
 
   return (
     <div className="h-[310px] w-[400px] border-2 border-cyan-500 rounded-md m-3 p-4">
-      <div className=" overflow-hidden">
-        <img
-          className="h-full w-full object-cover"
-          src={post.photoURL}
-          alt="img"
-        />
+      <div className="h-[65%] overflow-hidden object-contain">
+        <img className="h-full w-full" src={post.photoURL} alt="img" />
       </div>
       <div>
         <h1 className=" font-sans text-xl font-bold mb-2">{post.title}</h1>
