@@ -20,6 +20,7 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export type qs = {
   id: number;
@@ -38,6 +39,7 @@ export type formDataType = {
 
 function DashCreatePost() {
   const navigator = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
   const [qsArrey, setQsArrey] = useState<qs[]>([]);
   const [formUploading, setFormUploading] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
