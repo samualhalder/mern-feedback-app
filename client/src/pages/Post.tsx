@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { postType } from "../components/PostCard";
 import { TfiDirection } from "react-icons/tfi";
-import { Button, HR, Label, Rating, Spinner, Textarea } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import {
+  Alert,
+  Button,
+  HR,
+  Label,
+  Modal,
+  Rating,
+  Spinner,
+  Textarea,
+} from "flowbite-react";
 import { useSelector } from "react-redux";
+
 function Post() {
   const { currentUser } = useSelector((state) => state.user);
   const { postId } = useParams();
@@ -16,6 +27,31 @@ function Post() {
     { id: 5 },
   ]);
   const [rating, setRating] = useState(1);
+  const [openModal, setOpenModal] = useState(false);
+  const [postDeleteMessage, setPostDeleteMessage] = useState(null);
+  const navigator = useNavigate();
+
+  const handleDeletePost = async () => {
+    setPostDeleteMessage(null);
+    setOpenModal(false);
+    try {
+      const response = await fetch(
+        `/api/post/delete-post/${postId}/${post?.userId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        console.log("post delered succesfully");
+        navigator("/dashboard?tab=all-posts");
+      } else {
+        setPostDeleteMessage(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -29,6 +65,7 @@ function Post() {
     };
     fetchPost();
   }, [postId]);
+  console.log(post);
 
   if (post == null) {
     return (
@@ -100,16 +137,47 @@ function Post() {
           <div className="w-full md:w-[700px] flex flex-col items-center justify-center">
             <h1 className="text-xl font-bold">Questions</h1>
             <div className="w-full">
-              {post.questions.map((elm) => (
+              {post.questions.map((elm, ind) => (
                 <p
-                  key={elm.id}
+                  key={ind}
                   className="text-lg border-2 border-cyan-300 p-2 m-2 rounded-xl"
                 >
                   {elm.question}
                 </p>
               ))}
             </div>
-            <Button>Edit Post</Button>
+            <HR />
+            <div className="flex gap-4">
+              <Button>Edit Post</Button>
+              <Button color={"red"} onClick={() => setOpenModal(true)}>
+                Delete post
+              </Button>
+            </div>
+            {postDeleteMessage && <Alert>{postDeleteMessage}</Alert>}
+            <Modal
+              show={openModal}
+              size="md"
+              onClose={() => setOpenModal(false)}
+              popup
+            >
+              <Modal.Header />
+              <Modal.Body>
+                <div className="text-center">
+                  <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                  <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                    Are you sure you want to <span>delete</span> this post?
+                  </h3>
+                  <div className="flex justify-center gap-4">
+                    <Button color="failure" onClick={handleDeletePost}>
+                      {"Yes, I'm sure"}
+                    </Button>
+                    <Button color="gray" onClick={() => setOpenModal(false)}>
+                      No, cancel
+                    </Button>
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
           </div>
         )}
       </div>

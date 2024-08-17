@@ -1,12 +1,3 @@
-// userId: { type: String, require: true },
-// title: { type: String, require: true, length: { min: 4 } },
-// description: { type: String, require: true, length: { min: 1 } },
-// link: { type: String },
-// photoURL: { type: stiring },
-// questions: { type: Array, length: { max: 5 } },
-// mode: { type: String },
-
-import { json } from "express";
 import { errorHandler } from "../../utils/error.js";
 import Post from "../models/post.model.js";
 
@@ -18,9 +9,8 @@ export const createPost = (req, res, next) => {
 
   console.log(userId);
 
-  const { title, description, link, photoURL, questions, mode, username } =
+  let { title, description, link, photoURL, questions, mode, username } =
     req.body;
-  console.log(title, description, link, questions);
 
   if (!userId || !title || !description) {
     return next(errorHandler(400, "pls put all required fields bsdk"));
@@ -31,10 +21,12 @@ export const createPost = (req, res, next) => {
     title,
     description,
     link,
-    photoURL,
     questions,
     mode,
   };
+  if (photoURL != "") {
+    newPost.photoURL = photoURL;
+  }
   const post = new Post(newPost);
   post
     .save()
@@ -70,5 +62,30 @@ export const postById = async (req, res, next) => {
     }
   } catch (error) {
     return next(errorHandler(400, error.errmsg));
+  }
+};
+
+export const deletePost = async (req, res, next) => {
+  const { postId, postUserId } = req.params;
+  const userId = req.user.id;
+
+  try {
+    if (postUserId !== userId) {
+      return next(
+        errorHandler(400, "you are not allowed to delete this post.")
+      );
+    }
+    const post = await Post.findById({ _id: postId });
+    if (post == null) {
+      return next(errorHandler(400, "no such post."));
+    }
+    const response = await Post.findByIdAndDelete({ _id: postId });
+    if (response) {
+      res.status(200).json("post deleted succesfully.");
+    } else {
+      return next(errorHandler(400, response));
+    }
+  } catch (error) {
+    return next(errorHandler(400, error));
   }
 };

@@ -32,7 +32,7 @@ export type formDataType = {
   username?: string;
   description: string;
   link: string;
-  photoURL: string;
+  photoURL?: string;
   mode: "public" | "private";
   questions: qs[];
 };
@@ -54,7 +54,6 @@ function DashCreatePost() {
     username: currentUser.username,
     description: "",
     link: "",
-    photoURL: "",
     mode: "public",
     questions: qsArrey,
   });
@@ -124,8 +123,10 @@ function DashCreatePost() {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
+      console.log(data);
+
       if (response.ok) {
-        navigator(`/post/${data._id}`);
+        navigator(`/post/${data.post._id}`);
         console.log(data);
       } else {
         console.log(response);
