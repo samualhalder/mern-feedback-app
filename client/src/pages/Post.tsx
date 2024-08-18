@@ -148,7 +148,9 @@ function Post() {
             </div>
             <HR />
             <div className="flex gap-4">
-              <Button>Edit Post</Button>
+              <Button onClick={() => navigator(`/post/edit/${postId}`)}>
+                Edit Post
+              </Button>
               <Button color={"red"} onClick={() => setOpenModal(true)}>
                 Delete post
               </Button>

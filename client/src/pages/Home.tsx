@@ -1,7 +1,9 @@
-import React from "react";
-
 function Home() {
-  return <div className=" h-screen">Home</div>;
+  return (
+    <div className=" h-screen">
+      <h1 className="text-red-500">Home</h1>
+    </div>
+  );
 }
 
 export default Home;

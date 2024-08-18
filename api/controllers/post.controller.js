@@ -89,3 +89,38 @@ export const deletePost = async (req, res, next) => {
     return next(errorHandler(400, error));
   }
 };
+
+export const editPost = async (req, res, next) => {
+  console.log("hit", req.body);
+
+  const { title, description, link, photoURL, questions, mode, username } =
+    req.body;
+  const userId = req.user.id;
+  const { postId } = req.params;
+
+  try {
+    const post = await Post.findById({ _id: postId });
+    if (!post) {
+      return next(errorHandler(400, "no such post."));
+    }
+    if (post.userId !== userId) {
+      return next(errorHandler(400, "you are not allowed to edit this post."));
+    }
+    Post.findByIdAndUpdate(
+      { _id: postId },
+      {
+        $set: {
+          title,
+          description,
+          link,
+          photoURL,
+          questions,
+          mode,
+          username,
+        },
+      }
+    )
+      .then((d) => res.status(200).json("post updated succesfully"))
+      .catch((err) => next(errorHandler(400, err)));
+  } catch (error) {}
+};
