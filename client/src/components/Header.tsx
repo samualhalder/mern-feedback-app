@@ -37,7 +37,7 @@ function Header() {
     }
   }, [theme]);
   return (
-    <div className=" ">
+    <div className=" sticky top-0 z-10 opacity-80">
       <Navbar fluid rounded className="dark:bg-black ">
         <Navbar.Brand href="/">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
