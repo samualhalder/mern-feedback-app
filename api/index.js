@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import postRouter from "./routes/post.route.js";
+import feedbackRouter from "./routes/feedback.route.js";
+
 const app = express();
 dotenv.config();
 app.use(express.json());
@@ -24,6 +26,7 @@ app.listen(process.env.PORT, () => {
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/post", postRouter);
+app.use("/api/feedback", feedbackRouter);
 
 //error middleware
 
