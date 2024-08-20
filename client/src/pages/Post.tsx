@@ -15,6 +15,11 @@ import {
 } from "flowbite-react";
 import { useSelector } from "react-redux";
 
+type answearType = {
+  id: string;
+  answear: string;
+};
+
 function Post() {
   const { currentUser } = useSelector((state) => state.user);
   const { postId } = useParams();
@@ -30,6 +35,33 @@ function Post() {
   const [openModal, setOpenModal] = useState(false);
   const [postDeleteMessage, setPostDeleteMessage] = useState(null);
   const navigator = useNavigate();
+  const [answears, setAnswears] = useState<answearType[]>([]);
+  const [formData, setFormData] = useState({});
+
+  //    create feedback----------->
+
+  const handleAnswear = (e) => {
+    let flag = false;
+    answears.forEach((element) => {
+      if (element.id === e.target.id) {
+        flag = true;
+        element.answear = e.target.value;
+      }
+    });
+    if (flag == true) {
+      setAnswears([...answears]);
+    } else {
+      setAnswears([...answears, { id: e.target.id, answear: e.target.value }]);
+    }
+  };
+  console.log("ans", answears);
+  console.log("form", formData);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  //   Delete post --------------->
 
   const handleDeletePost = async () => {
     setPostDeleteMessage(null);
@@ -53,6 +85,8 @@ function Post() {
     }
   };
 
+  // use Effects----------------->
+
   useEffect(() => {
     const fetchPost = async () => {
       const response = await fetch(`/api/post/get-one-post/${postId}`);
@@ -65,7 +99,6 @@ function Post() {
     };
     fetchPost();
   }, [postId]);
-  console.log(post);
 
   if (post == null) {
     return (
@@ -98,8 +131,10 @@ function Post() {
           </a>
         </Button>
 
-        {post.userId !== currentUser._id && (
-          <section className="flex flex-col  justify-center items-center gap-3">
+        {/* Fot other users --------------------->  */}
+
+        {post.userId !== currentUser?._id && (
+          <form className="flex flex-col  justify-center items-center gap-3">
             <div className="flex flex-col">
               <Label className=" text-md mx-auto my-2">rate this product</Label>
 
@@ -116,6 +151,8 @@ function Post() {
               <Label>Your feedback</Label>
               <Textarea
                 className="w-full md:w-[700px]"
+                id="feedback"
+                onChange={(e) => handleChange(e)}
                 rows={4}
                 placeholder="write your openion/feedback here"
               />
@@ -126,14 +163,19 @@ function Post() {
                 <p key={ind}>{e.question}</p>
                 <Textarea
                   className="mt-1"
+                  id={e.id}
+                  onChange={(ev) => handleAnswear(ev)}
                   placeholder="write your answear for this question."
                 ></Textarea>
               </div>
             ))}
             <Button>Submit</Button>
-          </section>
+          </form>
         )}
-        {post.userId === currentUser._id && (
+
+        {/* for the post crator ---------------------> */}
+
+        {post.userId === currentUser?._id && (
           <div className="w-full md:w-[700px] flex flex-col items-center justify-center">
             <h1 className="text-xl font-bold">Questions</h1>
             <div className="w-full">
