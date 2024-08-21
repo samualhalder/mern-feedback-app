@@ -22,6 +22,8 @@ type answearType = {
 
 function Post() {
   const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
+
   const { postId } = useParams();
   const [post, setPost] = useState<postType | null>(null);
   const [stars, setstars] = useState([
@@ -36,7 +38,10 @@ function Post() {
   const [postDeleteMessage, setPostDeleteMessage] = useState(null);
   const navigator = useNavigate();
   const [answears, setAnswears] = useState<answearType[]>([]);
-  const [formData, setFormData] = useState({});
+  const [feedback, setFeedback] = useState("");
+  const [isLoadng, setIsLoadng] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [success, setsuccess] = useState<string | null>(null);
 
   //    create feedback----------->
 
@@ -54,13 +59,49 @@ function Post() {
       setAnswears([...answears, { id: e.target.id, answear: e.target.value }]);
     }
   };
-  console.log("ans", answears);
-  console.log("form", formData);
+  //   console.log("ans", answears);
+  //   console.log("form", formData);
+  //   console.log("ratings", rating);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setsuccess(null);
+    setErrorMessage(null);
+    if (currentUser === null) {
+      return setErrorMessage("please verify your self");
+    }
+    if (answears.length !== post?.questions.length || feedback === "") {
+      return setErrorMessage("pls enter all the fileds.");
+    }
+    setIsLoadng(true);
+    const formData = {
+      feedback,
+      answears,
+      ratings: rating,
+      postId: post?._id,
+      userId: currentUser._id,
+    };
+    console.log("form", formData);
+
+    try {
+      const response = await fetch("/api/feedback/submit-feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setsuccess("feedback added succesfully");
+      } else {
+        setErrorMessage(data.errMessege);
+      }
+    } catch (error) {
+      setErrorMessage(error);
+    }
+    setIsLoadng(false);
   };
-
   //   Delete post --------------->
 
   const handleDeletePost = async () => {
@@ -131,10 +172,13 @@ function Post() {
           </a>
         </Button>
 
-        {/* Fot other users --------------------->  */}
+        {/* For other users --------------------->  */}
 
         {post.userId !== currentUser?._id && (
-          <form className="flex flex-col  justify-center items-center gap-3">
+          <form
+            className="flex flex-col  justify-center items-center gap-3"
+            onSubmit={handleSubmit}
+          >
             <div className="flex flex-col">
               <Label className=" text-md mx-auto my-2">rate this product</Label>
 
@@ -152,7 +196,7 @@ function Post() {
               <Textarea
                 className="w-full md:w-[700px]"
                 id="feedback"
-                onChange={(e) => handleChange(e)}
+                onChange={(e) => setFeedback(e.target.value)}
                 rows={4}
                 placeholder="write your openion/feedback here"
               />
@@ -166,10 +210,15 @@ function Post() {
                   id={e.id}
                   onChange={(ev) => handleAnswear(ev)}
                   placeholder="write your answear for this question."
+                  l
                 ></Textarea>
               </div>
             ))}
-            <Button>Submit</Button>
+            <Button type="submit" disabled={isLoadng}>
+              {isLoadng ? <Spinner /> : "Submit"}
+            </Button>
+            {errorMessage && <Alert color={"failure"}>{errorMessage}</Alert>}
+            {success && <Alert color={"success"}>{success}</Alert>}
           </form>
         )}
 
