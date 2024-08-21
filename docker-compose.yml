@@ -1,0 +1,23 @@
+version: '3'
+services:
+  server:
+    build: ./
+    ports:
+      - 8080:8080
+    env_file:
+     - ./.env
+  client:
+    build: ./client
+    ports:
+      - 5173:5173
+    env_file:
+     - ./client/.env
+  database:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017
+    volumes:
+     - data:/data/db
+
+volumes:
+  data:
