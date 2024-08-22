@@ -1,18 +1,7 @@
 import { errorHandler } from "../../utils/error.js";
 import Feedback from "../models/feedback.model.js";
 import Post from "../models/post.model.js";
-// const feedbackSchema = new mongoose.Schema({
-//   postId: { type: String, require: true },
-//   userId: { type: String, require: true },
-//   feedback: { type: String, require: true },
-//   ratings: {
-//     type: Number,
-//     require: true,
-//     min: [1, "rating atleast be 1."],
-//     max: [5, "rating atmax can be 5."],
-//   },
-//   answears: { type: Array },
-// });
+import User from "../models/user.model.js";
 
 export const createFeedback = async (req, res, next) => {
   const authUserId = req.user.id;
@@ -53,6 +42,27 @@ export const createFeedback = async (req, res, next) => {
     res
       .status(200)
       .json({ message: "feedback submited successfully", feedback: result });
+  } catch (error) {
+    return next(errorHandler(400, error));
+  }
+};
+
+export const getFeedbackById = async (req, res, next) => {
+  console.log("hit");
+
+  const { postId } = req.params;
+  const userId = req.user.id;
+  try {
+    const feedback = await Feedback.findOne({ postId: postId, userId: userId });
+    const user = await User.findById({ _id: userId });
+
+    if (!feedback) {
+      return next(errorHandler(400, "There is no such feddback."));
+    }
+    if (!user) {
+      return next(errorHandler(400, "There is no such user."));
+    }
+    res.status(200).json(feedback);
   } catch (error) {
     return next(errorHandler(400, error));
   }

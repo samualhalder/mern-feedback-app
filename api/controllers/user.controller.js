@@ -1,5 +1,5 @@
 import { errorHandler } from "../../utils/error.js";
-import { User } from "../models/user.model.js";
+import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 export const editUser = async (req, res, next) => {
   console.log(req.body);

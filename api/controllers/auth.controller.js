@@ -1,6 +1,6 @@
 import { errorHandler } from "../../utils/error.js";
 import bcrypt from "bcrypt";
-import { User } from "../models/user.model.js";
+import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 
 //Sihnup

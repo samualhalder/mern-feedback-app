@@ -42,6 +42,7 @@ function Post() {
   const [isLoadng, setIsLoadng] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setsuccess] = useState<string | null>(null);
+  const [feedbackData, setFeedbackData] = useState({});
 
   //    create feedback----------->
 
@@ -126,6 +127,17 @@ function Post() {
     }
   };
 
+  // check if the user already given the feedback
+  const fetchFeedback = async () => {
+    const postRes = await fetch(`/api/feedback/get-feedback-by-id/${postId}`);
+    const data = await postRes.json();
+    if (postRes.ok) {
+      setFeedback(data.feedback);
+      setRating(data.ratings);
+      setAnswears(data.answears);
+    }
+  };
+
   // use Effects----------------->
 
   useEffect(() => {
@@ -139,6 +151,7 @@ function Post() {
       }
     };
     fetchPost();
+    fetchFeedback();
   }, [postId]);
 
   if (post == null) {
@@ -196,24 +209,31 @@ function Post() {
               <Textarea
                 className="w-full md:w-[700px]"
                 id="feedback"
+                value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
                 rows={4}
                 placeholder="write your openion/feedback here"
               />
             </div>
             {post.questions && <h1>please answare this questions</h1>}
-            {post.questions.map((e, ind) => (
-              <div className="w-full md:w-[700px]">
-                <p key={ind}>{e.question}</p>
-                <Textarea
-                  className="mt-1"
-                  id={e.id}
-                  onChange={(ev) => handleAnswear(ev)}
-                  placeholder="write your answear for this question."
-                  l
-                ></Textarea>
-              </div>
-            ))}
+            {post.questions.map((e, ind) => {
+              let value;
+              answears.forEach((ans) => {
+                if (ans.id == e.id) value = ans.answear;
+              });
+              return (
+                <div className="w-full md:w-[700px]">
+                  <p key={ind}>{e.question}</p>
+                  <Textarea
+                    className="mt-1"
+                    id={e.id}
+                    value={value}
+                    onChange={(ev) => handleAnswear(ev)}
+                    placeholder="write your answear for this question."
+                  ></Textarea>
+                </div>
+              );
+            })}
             <Button type="submit" disabled={isLoadng}>
               {isLoadng ? <Spinner /> : "Submit"}
             </Button>
