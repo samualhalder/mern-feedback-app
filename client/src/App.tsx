@@ -24,7 +24,7 @@ function App() {
   }
 
   return (
-    <div className="dark:bg-black">
+    <div className="dark:bg-[#0F0F0F]">
       <BrowserRouter>
         <Header></Header>
         <Routes>

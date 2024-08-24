@@ -19,7 +19,7 @@ function DashBoard() {
 
   return (
     <div className="min-h-screen dark:text-white flex flex-col sm:flex-row">
-      <div className="h-[100%] md:w-[30%] ">
+      <div className="h-[100%] md:w-[30%] m-2">
         <DashLeftSIdeBar />
       </div>
       <div className="md:w-[70%]">
