@@ -22,10 +22,10 @@ type answearType = {
 
 function Post() {
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
 
   const { postId } = useParams();
   const [post, setPost] = useState<postType | null>(null);
+  const [feedbackId, setFeedbackId] = useState<string | null>(null);
   const [stars, setstars] = useState([
     { id: 1 },
     { id: 2 },
@@ -42,7 +42,6 @@ function Post() {
   const [isLoadng, setIsLoadng] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setsuccess] = useState<string | null>(null);
-  const [feedbackData, setFeedbackData] = useState({});
 
   //    create feedback----------->
 
@@ -60,9 +59,6 @@ function Post() {
       setAnswears([...answears, { id: e.target.id, answear: e.target.value }]);
     }
   };
-  //   console.log("ans", answears);
-  //   console.log("form", formData);
-  //   console.log("ratings", rating);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -82,7 +78,6 @@ function Post() {
       postId: post?._id,
       userId: currentUser._id,
     };
-    console.log("form", formData);
 
     try {
       const response = await fetch("/api/feedback/submit-feedback", {
@@ -117,13 +112,48 @@ function Post() {
       );
       const data = await response.json();
       if (response.ok) {
-        console.log("post delered succesfully");
         navigator("/dashboard?tab=all-posts");
       } else {
         setPostDeleteMessage(data);
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // update feedback
+  const handleEdit = async () => {
+    setIsLoadng(true);
+    setsuccess(null);
+    setErrorMessage(null);
+
+    try {
+      const editedFormData = {
+        feedback,
+        rating,
+        answears,
+      };
+      const response = await fetch(
+        `/api/feedback/update-feedback/${feedbackId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedFormData),
+        }
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setsuccess("Feedback updated succesfully.");
+      } else {
+        setErrorMessage(data.errMessege.message);
+      }
+      setIsLoadng(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoadng(false);
     }
   };
 
@@ -135,8 +165,10 @@ function Post() {
       setFeedback(data.feedback);
       setRating(data.ratings);
       setAnswears(data.answears);
+      setFeedbackId(data._id);
     }
   };
+  //   console.log("feedback Id", feedbackId);
 
   // use Effects----------------->
 
@@ -146,8 +178,6 @@ function Post() {
       const data = await response.json();
       if (response.ok) {
         setPost(data);
-      } else {
-        console.log(response);
       }
     };
     fetchPost();
@@ -234,9 +264,15 @@ function Post() {
                 </div>
               );
             })}
-            <Button type="submit" disabled={isLoadng}>
-              {isLoadng ? <Spinner /> : "Submit"}
-            </Button>
+            {feedbackId ? (
+              <Button onClick={handleEdit} disabled={isLoadng}>
+                {isLoadng ? <Spinner /> : "Save"}
+              </Button>
+            ) : (
+              <Button type="submit" disabled={isLoadng}>
+                {isLoadng ? <Spinner /> : "Submit"}
+              </Button>
+            )}
             {errorMessage && <Alert color={"failure"}>{errorMessage}</Alert>}
             {success && <Alert color={"success"}>{success}</Alert>}
           </form>

@@ -47,9 +47,44 @@ export const createFeedback = async (req, res, next) => {
   }
 };
 
-export const getFeedbackById = async (req, res, next) => {
-  console.log("hit");
+export const updateFeedback = async (req, res, next) => {
+  const authUserId = req.user.id;
+  const { feedbackId } = req.params;
+  const { feedback, rating, answears } = req.body;
 
+  try {
+    const feedbackMain = await Feedback.findOne({ _id: feedbackId });
+
+    if (!feedbackMain) {
+      return next(errorHandler(400, "There is no such feedback."));
+    }
+    if (feedbackMain.userId !== authUserId) {
+      return next(
+        errorHandler(400, "you are not allowed to update this post.")
+      );
+    }
+    const response = await Feedback.findByIdAndUpdate(
+      { _id: feedbackId },
+      {
+        $set: {
+          feedback: feedback,
+          ratings: rating,
+          answears: answears,
+        },
+      },
+      {
+        new: true,
+      }
+    );
+    res
+      .status(200)
+      .json({ message: "feedback updated successfully", response });
+  } catch (error) {
+    return next(errorHandler(400, error));
+  }
+};
+
+export const getFeedbackById = async (req, res, next) => {
   const { postId } = req.params;
   const userId = req.user.id;
   try {
