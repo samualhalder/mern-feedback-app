@@ -102,3 +102,26 @@ export const getFeedbackById = async (req, res, next) => {
     return next(errorHandler(400, error));
   }
 };
+
+export const deleteFeedback = async (req, res, next) => {
+  const { feedbackId } = req.params;
+  const authUserId = req.user.id;
+  try {
+    const feedback = await Feedback.findById({ _id: feedbackId });
+    if (!feedback) {
+      return next(errorHandler(400, "no such feedback."));
+    }
+    console.log("userId", feedback.userId);
+    console.log("authuser id", authUserId);
+
+    if (feedback.userId !== authUserId) {
+      return next(
+        errorHandler(400, "you are not allowed to delete this post.")
+      );
+    }
+    await Feedback.findByIdAndDelete({ _id: feedbackId });
+    res.status(200).json("feedback deleted succesfully.");
+  } catch (error) {
+    return next(errorHandler(400, error));
+  }
+};

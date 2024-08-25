@@ -42,6 +42,7 @@ function Post() {
   const [isLoadng, setIsLoadng] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setsuccess] = useState<string | null>(null);
+  const [openFeedbackMoadal, setOpenFeedbackMoadal] = useState(false);
 
   //    create feedback----------->
 
@@ -168,7 +169,30 @@ function Post() {
       setFeedbackId(data._id);
     }
   };
-  //   console.log("feedback Id", feedbackId);
+
+  // delete feedback -------------->
+
+  const deleteFeedback = async () => {
+    setOpenFeedbackMoadal(false);
+    setsuccess(null);
+    setErrorMessage(null);
+    try {
+      const response = await fetch(
+        `/api/feedback/delete-feedback/${feedbackId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setsuccess("post deleted succesfully.");
+      } else {
+        setErrorMessage(data.errMessege);
+      }
+    } catch (error) {
+      setErrorMessage(error);
+    }
+  };
 
   // use Effects----------------->
 
@@ -216,6 +240,39 @@ function Post() {
         </Button>
 
         {/* For other users --------------------->  */}
+
+        {
+          // modal for delete feedback
+
+          <Modal
+            show={openFeedbackMoadal}
+            size="md"
+            onClose={() => setOpenFeedbackMoadal(false)}
+            popup
+          >
+            <Modal.Header />
+            <Modal.Body>
+              <div className="text-center">
+                <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                  Are you sure you want to delete your{" "}
+                  <span className="text-red-400">feedback</span>?
+                </h3>
+                <div className="flex justify-center gap-4">
+                  <Button color="failure" onClick={deleteFeedback}>
+                    {"Yes, I'm sure"}
+                  </Button>
+                  <Button
+                    color="gray"
+                    onClick={() => setOpenFeedbackMoadal(false)}
+                  >
+                    No, cancel
+                  </Button>
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
+        }
 
         {post.userId !== currentUser?._id && (
           <form
@@ -265,9 +322,17 @@ function Post() {
               );
             })}
             {feedbackId ? (
-              <Button onClick={handleEdit} disabled={isLoadng}>
-                {isLoadng ? <Spinner /> : "Save"}
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={handleEdit} disabled={isLoadng}>
+                  {isLoadng ? <Spinner /> : "Save"}
+                </Button>
+                <Button
+                  color={"red"}
+                  onClick={() => setOpenFeedbackMoadal((pre) => !pre)}
+                >
+                  Delete
+                </Button>
+              </div>
             ) : (
               <Button type="submit" disabled={isLoadng}>
                 {isLoadng ? <Spinner /> : "Submit"}
