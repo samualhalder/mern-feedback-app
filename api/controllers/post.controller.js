@@ -1,4 +1,5 @@
 import { errorHandler } from "../../utils/error.js";
+import Feedback from "../models/feedback.model.js";
 import Post from "../models/post.model.js";
 
 export const createPost = (req, res, next) => {
@@ -80,11 +81,8 @@ export const deletePost = async (req, res, next) => {
       return next(errorHandler(400, "no such post."));
     }
     const response = await Post.findByIdAndDelete({ _id: postId });
-    if (response) {
-      res.status(200).json("post deleted succesfully.");
-    } else {
-      return next(errorHandler(400, response));
-    }
+    await Feedback.deleteMany({ postId: postId });
+    res.status(200).json("post deleted succesfully.");
   } catch (error) {
     return next(errorHandler(400, error));
   }

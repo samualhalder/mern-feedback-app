@@ -125,3 +125,16 @@ export const deleteFeedback = async (req, res, next) => {
     return next(errorHandler(400, error));
   }
 };
+
+export const getAllFeedbackByUserId = async (req, res, next) => {
+  const authUserId = req.user.id;
+  const { order } = req.query;
+  try {
+    const result = await Feedback.find({ userId: authUserId }).sort({
+      createdAt: order,
+    });
+    res.status(200).json(result);
+  } catch (error) {
+    return next(errorHandler(400, "Something went wrond."));
+  }
+};
