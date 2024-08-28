@@ -6,6 +6,13 @@ services:
     build: ./
     networks:
       - mern-app
+    # volumes:
+    #  - ./api:/app
+    #  - ./utils:/app/utils
+    #  - ./package-lock.josn:/app/package-lock.json
+    #  - ./package.json:/app/package.json
+    #  - ./.env:/app/.env
+    #  - /app/node_modules
     ports:
       - 8080:8080
     env_file:
@@ -16,6 +23,8 @@ services:
     build: ./client
     networks:
       - mern-app
+    # volumes:
+    #  - ./client:/app
     ports:
       - 5173:5173
     command: npm run dev -- --host

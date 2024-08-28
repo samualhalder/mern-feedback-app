@@ -46,7 +46,7 @@ function DashAllFeedbacks() {
       <h1 className="text-5xl mx-auto">All Feedbacks</h1>
       <div className="flex justify-around">
         <p className="text-white border-2 bg-[#1F2937] p-5 m-4 text-lg rounded-lg">
-          Total Posts: {feedbacks.length}
+          Total no of feedbacks given : {feedbacks.length}
         </p>
         <Select
           className="border-2 bg-[#1F2937] p-4 bd m-4  rounded-lg"
