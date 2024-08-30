@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 import DashCreatePost from "./DashCreatePost";
 import DashAllPosts from "./DashAllPosts";
 import DashAllFeedbacks from "./DashAllFeedbacks";
-import DashStatistics from "./DashStatistics";
+
+import DashAnalytics from "./DashAnalytics";
 
 function DashBoard() {
   const [tab, setTab] = useState<string | null>("");
@@ -18,15 +19,17 @@ function DashBoard() {
   console.log(tab);
 
   return (
-    <div className="min-h-screen dark:text-white flex flex-col sm:flex-row">
-      <div className="h-[100%] md:w-[30%] m-2">
+    <div className="min-h-screen dark:text-white flex flex-col md:flex-row justify-between">
+      <div className=" md:w-[30%] mb-2 md:fixed ">
         <DashLeftSIdeBar />
       </div>
-      <div className="md:w-[70%]">
-        {tab === null ? <DashCreatePost /> : null}
-        {tab === "all-posts" ? <DashAllPosts /> : null}
-        {tab === "all-feedbacks" ? <DashAllFeedbacks /> : null}
-        {tab === "analytics" ? <DashStatistics /> : null}
+      <div className="min-w-[70%] md:w-full flex justify-center md:justify-end">
+        <div className="md:w-[70%] flex justify-center">
+          {tab === null ? <DashCreatePost /> : null}
+          {tab === "all-posts" ? <DashAllPosts /> : null}
+          {tab === "all-feedbacks" ? <DashAllFeedbacks /> : null}
+          {tab === "analytics" ? <DashAnalytics /> : null}
+        </div>
       </div>
     </div>
   );
