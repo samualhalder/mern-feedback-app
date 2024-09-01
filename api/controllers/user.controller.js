@@ -72,7 +72,6 @@ export const deleteUser = async (req, res, next) => {
 
 export const findUserById = async (req, res, next) => {
   const { userId } = req.params;
-  console.log("hit", req.params.emailuserId);
 
   try {
     const user = await User.findById({ _id: req.params.userId });

@@ -12,6 +12,7 @@ import DashBoard from "./pages/DashBoard";
 import Post from "./pages/Post";
 import PageNotFound from "./pages/PageNotFound";
 import PostEditPage from "./pages/PostEditPage";
+import AnalyticsPage from "./pages/AnalyticsPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ function App() {
           <Route path="/dashboard" element={<DashBoard />}></Route>
           <Route path="/post/:postId" element={<Post />}></Route>
           <Route path="/post/edit/:postId" element={<PostEditPage />}></Route>
+          <Route path="/analytics/:postId" element={<AnalyticsPage />}></Route>
           <Route
             path="/*"
             element={<PageNotFound message="Page Not Found" />}

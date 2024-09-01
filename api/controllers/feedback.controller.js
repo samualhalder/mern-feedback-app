@@ -138,3 +138,17 @@ export const getAllFeedbackByUserId = async (req, res, next) => {
     return next(errorHandler(400, "Something went wrond."));
   }
 };
+
+export const getFeedbacksByPostId = async (req, res, next) => {
+  const { postId } = req.params;
+  const user = req.user;
+  try {
+    if (!user) {
+      return next(errorHandler(400, "Unorthorized"));
+    }
+    const result = await Feedback.find({ postId: postId });
+    res.status(200).json(result);
+  } catch (error) {
+    return next(errorHandler(400, "some thing went wrong"));
+  }
+};

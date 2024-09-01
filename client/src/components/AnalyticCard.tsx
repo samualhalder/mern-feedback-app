@@ -1,18 +1,6 @@
-export type postType = {
-  _id?: string;
-  username?: string;
-  userId: string;
-  title: string;
-  description: string;
-  link: string;
-  photoURL: string;
-  questions: string[];
-  mode: string;
-  createdAt: Date;
-};
-function PostCard({ post }: { post: postType }) {
-  console.log(post);
+import { postType } from "./PostCard";
 
+export default function AnalyticCard({ post }: { post: postType }) {
   return (
     <div className="h-[310px] w-[400px] flex flex-col justify-between bg-[#F3F4F6] dark:bg-[#1F2937] shadow-lg rounded-md m-3 p-4 gap-3">
       <div className="min-h-[65%] overflow-hidden object-contain">
@@ -26,5 +14,3 @@ function PostCard({ post }: { post: postType }) {
     </div>
   );
 }
-
-export default PostCard;
