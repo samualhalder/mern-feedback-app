@@ -14,6 +14,7 @@ import PageNotFound from "./pages/PageNotFound";
 import PostEditPage from "./pages/PostEditPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import FeedbackPage from "./pages/FeedbackPage";
+import FooterComp from "./components/Footer";
 
 function App() {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ function App() {
             element={<PageNotFound message="Page Not Found" />}
           ></Route>
         </Routes>
+        <FooterComp />
       </BrowserRouter>
     </div>
   );
