@@ -152,3 +152,16 @@ export const getFeedbacksByPostId = async (req, res, next) => {
     return next(errorHandler(400, "some thing went wrong"));
   }
 };
+
+export const getFeedbackByFeedbackID = async (req, res, next) => {
+  const { feedbackId } = req.params;
+  try {
+    const feedback = await Feedback.findById({ _id: feedbackId });
+    if (!feedback) {
+      return next(errorHandler(400, "no such feedback"));
+    }
+    res.status(200).json(feedback);
+  } catch (error) {
+    return next(errorHandler(400, "some thing went wrong"));
+  }
+};

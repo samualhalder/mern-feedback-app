@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
       </div>
       <div className="flex flex-col justify-center items-center">
         {feedbacks?.map((elm, ind) => (
-          <Link to={`/post/${elm.postId}`} key={ind}>
+          <Link to={`/feedback/${elm._id}`} key={ind}>
             <FeedbackCard feedback={elm} />
           </Link>
         ))}
