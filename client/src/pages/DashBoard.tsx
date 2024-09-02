@@ -20,10 +20,10 @@ function DashBoard() {
 
   return (
     <div className="min-h-screen dark:text-white flex flex-col md:flex-row justify-between">
-      <div className=" md:w-[30%] mb-2 md:fixed ">
+      <div className=" md:w-[40%] mb-2 ">
         <DashLeftSIdeBar />
       </div>
-      <div className="min-w-[70%] md:w-full flex justify-center md:justify-end">
+      <div className="w-full flex justify-center ">
         <div className="md:w-[70%] flex justify-center">
           {tab === null ? <DashCreatePost /> : null}
           {tab === "all-posts" ? <DashAllPosts /> : null}
