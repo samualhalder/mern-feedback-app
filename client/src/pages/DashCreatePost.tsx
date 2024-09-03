@@ -74,7 +74,7 @@ function DashCreatePost() {
     setPhotoUploading(true);
     setFileTransferError(null);
     const storage = getStorage(app);
-    const fileName = new Date().getTime() + imageFile.name;
+    const fileName = new Date().getTime() + imageFile?.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
     uploadTask.on(

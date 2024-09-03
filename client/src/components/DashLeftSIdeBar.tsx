@@ -7,10 +7,11 @@ import { PiSignOut } from "react-icons/pi";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "../redux/user/userSlice";
+import { RootState } from "../redux/store";
 
 function DashLeftSIdeBar() {
   const [tab, setTab] = useState<string | null>("");
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();

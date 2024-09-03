@@ -6,12 +6,9 @@ import { Link } from "react-router-dom";
 function DashAllPosts() {
   const [allPosts, setallPosts] = useState<postType[]>([]);
   const [order, setOrder] = useState<string>("newest");
-  const [limit, setlimit] = useState(10);
   useEffect(() => {
     const fetchPost = async () => {
-      const response = await fetch(
-        `/api/post/all-posts?order=${order}&limit=${limit}`
-      );
+      const response = await fetch(`/api/post/all-posts?order=${order}`);
       const data = await response.json();
       if (response.ok) {
         setallPosts(data.posts);

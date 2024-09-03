@@ -14,6 +14,7 @@ import {
   Textarea,
 } from "flowbite-react";
 import { useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
 
 type answearType = {
   id: string;
@@ -21,7 +22,7 @@ type answearType = {
 };
 
 function Post() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
 
   const { postId } = useParams();
   const [post, setPost] = useState<postType | null>(null);
@@ -40,7 +41,9 @@ function Post() {
   const [answears, setAnswears] = useState<answearType[]>([]);
   const [feedback, setFeedback] = useState("");
   const [isLoadng, setIsLoadng] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null | unknown>(
+    null
+  );
   const [success, setsuccess] = useState<string | null>(null);
   const [openFeedbackMoadal, setOpenFeedbackMoadal] = useState(false);
 

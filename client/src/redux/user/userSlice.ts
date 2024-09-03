@@ -1,21 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const userSlice=createSlice({
-    name:"user",
-    initialState:{
-        currentUser:null,
-    },
-    reducers:{
-        signInSuccesfull:(state,action)=>{
-            state.currentUser=action.payload
-            localStorage.setItem("feedback-user", JSON.stringify(action.payload));
-        },
-        signOut:(state)=>{
-            state.currentUser=null
-            localStorage.removeItem("feedback-user");
-        }
-    }
-})
+export interface User {
+  _id: string;
+  username: string;
+  email: string;
+  photoURL: string;
+}
+interface UserState {
+  currentUser: User | null;
+}
 
-export const {signInSuccesfull,signOut}=userSlice.actions
-export default userSlice.reducer
+// Initialize the state with the type UserState
+const initialState: UserState = {
+  currentUser: null,
+};
+const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    signInSuccesfull: (state, action) => {
+      state.currentUser = action.payload;
+      localStorage.setItem("feedback-user", JSON.stringify(action.payload));
+    },
+    signOut: (state) => {
+      state.currentUser = null;
+      localStorage.removeItem("feedback-user");
+    },
+  },
+});
+
+export const { signInSuccesfull, signOut } = userSlice.actions;
+export default userSlice.reducer;

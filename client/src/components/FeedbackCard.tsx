@@ -2,10 +2,11 @@ import { FeedbackType } from "../pages/DashAllFeedbacks";
 import { IoStar } from "react-icons/io5";
 import { BsDot } from "react-icons/bs";
 import { useEffect, useState } from "react";
+import { User } from "../types/type";
 
 export default function FeedbackCard({ feedback }: { feedback: FeedbackType }) {
   const { userId } = feedback;
-  const [user, setuser] = useState(null);
+  const [user, setuser] = useState<User | null>();
   useEffect(() => {
     fetch(`/api/user/getUserById/${userId}`)
       .then((res) => res.json())

@@ -1,7 +1,7 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signInSuccesfull } from "../redux/user/userSlice";
 import OAuth from "../components/OAuth";
@@ -40,7 +40,8 @@ function SignIn() {
       }
       setLoading(false);
     } catch (error) {
-      setErrorMessage(error.errMessege);
+      console.log(error);
+
     }
   };
 

@@ -1,5 +1,5 @@
 import { Button, HR, TextInput } from "flowbite-react";
-import { FaMinus, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import { qs } from "../pages/DashCreatePost";
 import { useState } from "react";
 

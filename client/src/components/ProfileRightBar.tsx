@@ -9,6 +9,7 @@ import {
 } from "flowbite-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 type formDataType = {
   firstName?: string;
   secondName?: string;
@@ -22,7 +23,7 @@ type formDataType = {
 };
 
 function ProfileRightBar() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const [loading, setLoading] = useState<boolean>(false);
   const [termAgred, setTermAgred] = useState<boolean>(false);
 
@@ -38,7 +39,7 @@ function ProfileRightBar() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`/api/user/updateUser/${currentUser._id}`, {
+      const response = await fetch(`/api/user/updateUser/${currentUser?._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

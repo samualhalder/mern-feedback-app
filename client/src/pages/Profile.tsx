@@ -18,9 +18,10 @@ import { useNavigate } from "react-router-dom";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import ProfileRightBar from "../components/ProfileRightBar";
+import { RootState } from "../redux/store";
 
 function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +66,7 @@ function Profile() {
     try {
       const fetchingFunction = async () => {
         const response = await fetch(
-          `/api/user/updateUser/${currentUser._id}`,
+          `/api/user/updateUser/${currentUser?._id}`,
           {
             method: "POST",
             headers: {
@@ -91,15 +92,6 @@ function Profile() {
       setShowForm((pre) => !pre);
     }
   };
-
-  useEffect(() => {
-    if (imageFile) {
-      uploadImage();
-    }
-  }, [imageFile]);
-  useEffect(() => {
-    setFormData({ ...formData, photoURL: imageFileURL });
-  }, [imageFileURL]);
 
   const uploadImage = async () => {
     setPhotoUploading(true);
@@ -135,9 +127,17 @@ function Profile() {
     );
   };
 
+  useEffect(() => {
+    if (imageFile) {
+      uploadImage();
+    }
+  }, [imageFile]);
+  useEffect(() => {
+    setFormData({ ...formData, photoURL: imageFileURL });
+  }, [imageFileURL]);
   const deleteHandler = async () => {
     try {
-      const response = await fetch(`/api/user/deleteUser/${currentUser._id}`, {
+      const response = await fetch(`/api/user/deleteUser/${currentUser?._id}`, {
         method: "DELETE",
       });
       const data = await response.json();

@@ -1,6 +1,5 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
 
 import { useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
@@ -41,7 +40,7 @@ function SignUp() {
       }
     } catch (error) {
       setLoading(false);
-      setErrorMessage(error.message);
+   
     }
   };
 

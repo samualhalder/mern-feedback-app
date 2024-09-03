@@ -4,11 +4,11 @@ import { CiDark, CiLight } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../redux/user/userSlice";
+import { RootState } from "../redux/store";
 
 function Header() {
   const currtheme = localStorage.getItem("feed-back-theme");
-  const storedUser = localStorage.getItem("feedback-user");
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const [theme, setTheme] = useState(currtheme);
   const navigate = useNavigate();
   const dispatch = useDispatch();

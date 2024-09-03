@@ -77,7 +77,6 @@ function FooterComp() {
           <Footer.Copyright
             by="Samual Halder"
             href="https://www.linkedin.com/in/samual-halder-464b8820a/"
-            target="_blanck"
             year={new Date().getFullYear()}
           />
           <div className="flex gap-3 mt-3">
