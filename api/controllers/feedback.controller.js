@@ -165,3 +165,30 @@ export const getFeedbackByFeedbackID = async (req, res, next) => {
     return next(errorHandler(400, "some thing went wrong"));
   }
 };
+
+export const getAverageRating = async (req, res, next) => {
+  const { postId } = req.params;
+  console.log(postId);
+
+  try {
+    const result = await Feedback.aggregate([
+      {
+        $match: {
+          postId: postId,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          averageRating: {
+            $avg: "$ratings",
+          },
+        },
+      },
+    ]);
+
+    res.status(200).json(result);
+  } catch (error) {
+    return next(errorHandler(400, "some thing went wrong."));
+  }
+};
