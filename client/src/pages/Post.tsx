@@ -14,7 +14,7 @@ import {
   Textarea,
 } from "flowbite-react";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
+import { RootState } from "../redux/store";
 
 type answearType = {
   id: string;
@@ -27,13 +27,7 @@ function Post() {
   const { postId } = useParams();
   const [post, setPost] = useState<postType | null>(null);
   const [feedbackId, setFeedbackId] = useState<string | null>(null);
-  const [stars, setstars] = useState([
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-  ]);
+  const stars = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
   const [rating, setRating] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [postDeleteMessage, setPostDeleteMessage] = useState(null);
@@ -41,15 +35,13 @@ function Post() {
   const [answears, setAnswears] = useState<answearType[]>([]);
   const [feedback, setFeedback] = useState("");
   const [isLoadng, setIsLoadng] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null | unknown>(
-    null
-  );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setsuccess] = useState<string | null>(null);
   const [openFeedbackMoadal, setOpenFeedbackMoadal] = useState(false);
 
   //    create feedback----------->
 
-  const handleAnswear = (e) => {
+  const handleAnswear = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let flag = false;
     answears.forEach((element) => {
       if (element.id === e.target.id) {
@@ -57,7 +49,7 @@ function Post() {
         element.answear = e.target.value;
       }
     });
-    if (flag == true) {
+    if (flag) {
       setAnswears([...answears]);
     } else {
       setAnswears([...answears, { id: e.target.id, answear: e.target.value }]);
@@ -98,7 +90,7 @@ function Post() {
         setErrorMessage(data.errMessege);
       }
     } catch (error) {
-      setErrorMessage(error);
+      setErrorMessage("some Thing went wrong");
     }
     setIsLoadng(false);
   };
@@ -193,7 +185,7 @@ function Post() {
         setErrorMessage(data.errMessege);
       }
     } catch (error) {
-      setErrorMessage(error);
+      setErrorMessage("some thing went wrong.");
     }
   };
 

@@ -29,7 +29,6 @@ function Profile() {
   const [showToast, setShowToast] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>();
   const [imageFileURL, setImageFileURL] = useState<string | null>(null);
-  const [photoUploading, setPhotoUploading] = useState(false);
   const [fileTransferError, setFileTransferError] = useState<string | null>(
     null
   );
@@ -88,13 +87,13 @@ function Profile() {
       setShowForm((pre) => !pre);
     } catch (error) {
       setLoading(false);
-      setError(error);
+      setError("some thing went wrong");
       setShowForm((pre) => !pre);
     }
   };
 
   const uploadImage = async () => {
-    setPhotoUploading(true);
+    if(!imageFile) return ;
     setFileTransferError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
@@ -107,21 +106,19 @@ function Profile() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFileTransferPersantage(+progress.toFixed(0));
       },
-      (error) => {
+      () => {
         setFileTransferError(
           "Could not upload the image (size may be more than 2 MB )"
         );
         setFileTransferPersantage(null);
         setImageFile(null);
         setImageFileURL(null);
-        setPhotoUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileURL(downloadURL);
           setFormData({ ...formData, photoURL: downloadURL });
           setFileTransferPersantage(null);
-          setPhotoUploading(false);
         });
       }
     );

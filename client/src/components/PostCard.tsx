@@ -1,3 +1,7 @@
+export type questionType = {
+  id: string;
+  question: string;
+};
 export type postType = {
   _id?: string;
   username?: string;
@@ -6,7 +10,7 @@ export type postType = {
   description: string;
   link: string;
   photoURL: string;
-  questions: string[];
+  questions: questionType[];
   mode: string;
   createdAt: Date;
 };

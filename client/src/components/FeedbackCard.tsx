@@ -2,7 +2,11 @@ import { FeedbackType } from "../pages/DashAllFeedbacks";
 import { IoStar } from "react-icons/io5";
 import { BsDot } from "react-icons/bs";
 import { useEffect, useState } from "react";
-import { User } from "../types/type";
+
+export type User = {
+  username: string;
+  photoURL: string;
+};
 
 export default function FeedbackCard({ feedback }: { feedback: FeedbackType }) {
   const { userId } = feedback;

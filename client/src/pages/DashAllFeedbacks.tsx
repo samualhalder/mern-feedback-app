@@ -1,11 +1,11 @@
 import { Select } from "flowbite-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import FeedbackCard from "../components/FeedbackCard";
 
 type ansType = {
   id: string;
-  answeat: string;
+  answear: string;
 };
 
 export type FeedbackType = {

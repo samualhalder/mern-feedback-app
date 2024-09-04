@@ -6,7 +6,7 @@ export interface User {
   email: string;
   photoURL: string;
 }
-interface UserState {
+export interface UserState {
   currentUser: User | null;
 }
 

@@ -10,9 +10,9 @@ import {
   TextInput,
   Toast,
 } from "flowbite-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AddQst from "../components/AddQst";
-import { useSelector } from "react-redux";
+
 import { useEffect, useState } from "react";
 import { formDataType, qs } from "./DashCreatePost";
 import {
@@ -26,11 +26,8 @@ import { HiCheck } from "react-icons/hi";
 
 export default function PostEditPage() {
   const { postId } = useParams();
-  const navigator = useNavigate();
-  const { currentUser } = useSelector((state) => state.user);
   const [qsArrey, setQsArrey] = useState<qs[]>([]);
   const [formUploading, setFormUploading] = useState(false);
-  const [photoUploading, setPhotoUploading] = useState(false);
   const [editSuccesMessage, setEditSuccesMessage] = useState<string | null>(
     null
   );
@@ -63,7 +60,7 @@ export default function PostEditPage() {
   };
 
   const uploadImage = async () => {
-    setPhotoUploading(true);
+    if (!imageFile) return;
     setFileTransferError(null);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
@@ -76,7 +73,7 @@ export default function PostEditPage() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFileTransferPersantage(+progress.toFixed(0));
       },
-      (error) => {
+      () => {
         setFileTransferError(
           "Could not upload the image (size may be more than 2 MB )"
         );
@@ -84,14 +81,12 @@ export default function PostEditPage() {
         setFileTransferPersantage(null);
         setImageFile(null);
         setImageFileURL("");
-        setPhotoUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileURL(downloadURL);
           setFormData({ ...formData, photoURL: downloadURL });
           setFileTransferPersantage(null);
-          setPhotoUploading(false);
         });
       }
     );
@@ -126,8 +121,7 @@ export default function PostEditPage() {
         setErrorMessage(data.errorMessage);
       }
     } catch (error) {
-      console.log(error);
-      setErrorMessage(error.message);
+      setErrorMessage("some thing went wrong.");
     }
     setFormUploading(false);
   };

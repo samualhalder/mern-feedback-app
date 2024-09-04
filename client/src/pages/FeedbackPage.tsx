@@ -6,10 +6,9 @@ import { HR, Label, Rating } from "flowbite-react";
 import { FeedbackType } from "./DashAllFeedbacks";
 
 function FeedbackPage() {
-  console.log("Feedback page loaded");
   const { feedbackId } = useParams();
-  const [feedback, setFeedback] = useState<FeedbackType | null>(null);
-  const [post, setPost] = useState<postType | null>(null);
+  const [feedback, setFeedback] = useState<FeedbackType>();
+  const [post, setPost] = useState<postType>();
   const stars = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
   const fetchPost = async (postId: string) => {
@@ -47,12 +46,16 @@ function FeedbackPage() {
 
       <div className="flex flex-col  justify-center items-center gap-3">
         <div className="flex flex-col">
-          <Label className=" text-md mx-auto my-2">rate this product</Label>
+          <Label className=" text-md mx-auto my-2">Ratings</Label>
 
           <Rating size="lg">
-            {stars.map((elm) => (
-              <Rating.Star filled={elm.id <= feedback?.ratings} key={elm.id} />
-            ))}
+            {feedback &&
+              stars.map((elm) => (
+                <Rating.Star
+                  filled={elm.id <= feedback?.ratings}
+                  key={elm.id}
+                />
+              ))}
           </Rating>
         </div>
         <div className="w-full md:w-[700px]">
@@ -62,20 +65,23 @@ function FeedbackPage() {
           </p>
         </div>
         <HR />
-        {post?.questions.map((e, ind) => {
-          let value;
-          feedback.answears.forEach((ans) => {
-            if (ans.id == e.id) value = ans.answear;
-          });
-          return (
-            <div className="w-full md:w-[700px]">
-              <p key={ind}>{e.question}</p>
-              <p className="border-2 border-gray-400 p-2 mt-2 rounded-lg">
-                {value}
-              </p>
-            </div>
-          );
-        })}
+        {feedback &&
+          post?.questions.map((e, ind) => {
+            let value;
+            feedback.answears.forEach((ans) => {
+              if (ans.id == e.id) value = ans.answear;
+            });
+            console.log(post);
+
+            return (
+              <div className="w-full md:w-[700px]">
+                <p key={ind}>{e.question}</p>
+                <p className="border-2 border-gray-400 p-2 mt-2 rounded-lg">
+                  {value}
+                </p>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

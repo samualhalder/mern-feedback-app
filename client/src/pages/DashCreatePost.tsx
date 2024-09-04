@@ -21,6 +21,7 @@ import {
 import { app } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export type qs = {
   id: number;
@@ -39,10 +40,9 @@ export type formDataType = {
 
 function DashCreatePost() {
   const navigator = useNavigate();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state: RootState) => state.user);
   const [qsArrey, setQsArrey] = useState<qs[]>([]);
   const [formUploading, setFormUploading] = useState(false);
-  const [photoUploading, setPhotoUploading] = useState(false);
   const [fileTransferError, setFileTransferError] = useState<string | null>(
     null
   );
@@ -51,7 +51,7 @@ function DashCreatePost() {
   >(null);
   const [formData, setFormData] = useState<formDataType>({
     title: "",
-    username: currentUser.username,
+    username: currentUser?.username,
     description: "",
     link: "",
     mode: "public",
@@ -71,10 +71,10 @@ function DashCreatePost() {
   };
 
   const uploadImage = async () => {
-    setPhotoUploading(true);
     setFileTransferError(null);
+    if (!imageFile) return;
     const storage = getStorage(app);
-    const fileName = new Date().getTime() + imageFile?.name;
+    const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
     uploadTask.on(
@@ -84,7 +84,7 @@ function DashCreatePost() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFileTransferPersantage(+progress.toFixed(0));
       },
-      (error) => {
+      () => {
         setFileTransferError(
           "Could not upload the image (size may be more than 2 MB )"
         );
@@ -92,14 +92,12 @@ function DashCreatePost() {
         setFileTransferPersantage(null);
         setImageFile(null);
         setImageFileURL("");
-        setPhotoUploading(false);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileURL(downloadURL);
           setFormData({ ...formData, photoURL: downloadURL });
           setFileTransferPersantage(null);
-          setPhotoUploading(false);
         });
       }
     );
