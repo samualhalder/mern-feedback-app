@@ -1,15 +1,40 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FeedbackType } from "./DashAllFeedbacks";
-import { Button, HR, Select } from "flowbite-react";
+import { Button, HR, Modal } from "flowbite-react";
 import FeedbackCard from "../components/FeedbackCard";
 import { postType } from "../components/PostCard";
 import { TfiDirection } from "react-icons/tfi";
+import { IoStarSharp } from "react-icons/io5";
+import { FaCheck, FaShare } from "react-icons/fa";
+
+import {
+  EmailIcon,
+  EmailShareButton,
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  RedditIcon,
+  RedditShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share";
 
 export default function AnalyticsPage() {
   const { postId } = useParams();
   const [feedbacks, setFeedbacks] = useState<FeedbackType[]>();
   const [post, setPost] = useState<postType>();
+  const [avgRatings, setAvgRatings] = useState<number>(-1);
+  const [openModal, setOpenModal] = useState(true);
+  const [copiedToclickBoard, setCopiedToclickBoard] = useState(false);
+
+  const shareableURL = window.location.href;
+
   useEffect(() => {
     try {
       const fetchFeedback = async () => {
@@ -32,6 +57,12 @@ export default function AnalyticsPage() {
           setPost(data);
         }
       };
+
+      fetch(`/api/feedback/get-avg-rating/${postId}`)
+        .then((res) => res.json())
+        .then((res) => setAvgRatings(3))
+        .catch((err) => console.log(err));
+      console.log(avgRatings);
 
       fetchFeedback();
       fetchPost();
@@ -85,10 +116,20 @@ export default function AnalyticsPage() {
         <p className="text-white border-2 bg-[#1F2937] p-5 m-4 text-lg rounded-lg">
           Total no of feedbacks given : {feedbacks?.length}
         </p>
-        <Select className="border-2 bg-[#1F2937] p-4 bd m-4  rounded-lg">
-          <option value="desc">Newest</option>
-          <option value="asc">oldest</option>
-        </Select>
+        <div
+          className={`border-2 ${avgRatings >= 4 && "bg-green-400"}
+            ${avgRatings >= 2 && avgRatings < 4 && "bg-yellow-400 "}
+            ${avgRatings <= 1 && "bg-red-600"}
+           p-4  m-4  rounded-lg w-40 text-center`}
+        >
+          <p>
+            Aver age rating:{" "}
+            <span className="flex justify-center items-center font-semibold text-xl">
+              {avgRatings}
+              <IoStarSharp />
+            </span>
+          </p>
+        </div>
       </div>
       <div className="flex flex-col justify-center items-center">
         {feedbacks?.map((elm, ind) => (
@@ -97,6 +138,66 @@ export default function AnalyticsPage() {
           </Link>
         ))}
       </div>
+      <Button onClick={() => setOpenModal(true)}>
+        <FaShare size={30} />
+      </Button>
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={() => setOpenModal(false)}
+        popup
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              share this page as a testimonial.
+            </h3>
+            <div className="my-4 flex gap-1 border-2 border-cyan-500 rounded-xl overflow-hidden">
+              <p className="pl-1 py-2 text-white truncate">{shareableURL}</p>
+              <Button
+                className=" ring-0 rounded-l-none text-center"
+                onClick={() => {
+                  setCopiedToclickBoard(true);
+                  navigator.clipboard.writeText(shareableURL);
+                }}
+              >
+                {!copiedToclickBoard ? "Copy" : <FaCheck size={20} />}
+              </Button>
+            </div>
+            <div className="flex justify-center gap-4">
+              <EmailShareButton url={shareableURL}>
+                {" "}
+                <EmailIcon size={35} round={true} />
+              </EmailShareButton>
+              <FacebookShareButton url={shareableURL}>
+                {" "}
+                <FacebookIcon size={35} round={true} />
+              </FacebookShareButton>
+              <TwitterShareButton url={shareableURL}>
+                {" "}
+                <TwitterIcon size={35} round={true} />
+              </TwitterShareButton>
+              <RedditShareButton url={shareableURL}>
+                {" "}
+                <RedditIcon size={35} round={true} />
+              </RedditShareButton>
+              <LinkedinShareButton url={shareableURL}>
+                {" "}
+                <LinkedinIcon size={35} round={true} />
+              </LinkedinShareButton>
+              <TelegramShareButton url={shareableURL}>
+                {" "}
+                <TelegramIcon size={35} round={true} />
+              </TelegramShareButton>
+              <WhatsappShareButton url={shareableURL}>
+                {" "}
+                <WhatsappIcon size={35} round={true} />
+              </WhatsappShareButton>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
