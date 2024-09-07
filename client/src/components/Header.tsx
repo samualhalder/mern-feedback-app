@@ -89,9 +89,9 @@ function Header() {
               <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
             </Dropdown>
           )}
-          <Navbar.Toggle />
+          {/* <Navbar.Toggle /> */}
         </div>
-        <Navbar.Collapse>
+        {/* <Navbar.Collapse>
           <Navbar.Link href="/" active>
             Home
           </Navbar.Link>
@@ -99,7 +99,7 @@ function Header() {
           <Navbar.Link href="#">Services</Navbar.Link>
           <Navbar.Link href="#">Pricing</Navbar.Link>
           <Navbar.Link href="#">Contact</Navbar.Link>
-        </Navbar.Collapse>
+        </Navbar.Collapse> */}
       </Navbar>
     </div>
   );

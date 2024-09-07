@@ -9,8 +9,6 @@ import { IoStarSharp } from "react-icons/io5";
 import { FaCheck, FaShare } from "react-icons/fa";
 
 import {
-  EmailIcon,
-  EmailShareButton,
   FacebookIcon,
   FacebookShareButton,
   LinkedinIcon,
@@ -30,7 +28,7 @@ export default function AnalyticsPage() {
   const [feedbacks, setFeedbacks] = useState<FeedbackType[]>();
   const [post, setPost] = useState<postType>();
   const [avgRatings, setAvgRatings] = useState<number>(-1);
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [copiedToclickBoard, setCopiedToclickBoard] = useState(false);
 
   const shareableURL = window.location.href;
@@ -60,7 +58,7 @@ export default function AnalyticsPage() {
 
       fetch(`/api/feedback/get-avg-rating/${postId}`)
         .then((res) => res.json())
-        .then((res) => setAvgRatings(3))
+        .then((res) => setAvgRatings(res[0].averageRating))
         .catch((err) => console.log(err));
       console.log(avgRatings);
 
@@ -123,9 +121,9 @@ export default function AnalyticsPage() {
            p-4  m-4  rounded-lg w-40 text-center`}
         >
           <p>
-            Aver age rating:{" "}
+            Average rating:{" "}
             <span className="flex justify-center items-center font-semibold text-xl">
-              {avgRatings}
+              {avgRatings.toFixed(1)}
               <IoStarSharp />
             </span>
           </p>
@@ -166,10 +164,6 @@ export default function AnalyticsPage() {
               </Button>
             </div>
             <div className="flex justify-center gap-4">
-              <EmailShareButton url={shareableURL}>
-                {" "}
-                <EmailIcon size={35} round={true} />
-              </EmailShareButton>
               <FacebookShareButton url={shareableURL}>
                 {" "}
                 <FacebookIcon size={35} round={true} />
