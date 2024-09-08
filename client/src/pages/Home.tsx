@@ -7,7 +7,10 @@ function Home() {
   const { currentUser } = useSelector((state: RootState) => state.user);
   return (
     <div className=" h-screen dark:text-white">
-      <div className="w-full h-full p-2 flex flex-col justify-center  items-center">
+      <div className=" relative w-full h-full p-2 flex flex-col justify-center  items-center overflow-hidden">
+        <div className=" absolute h-72 w-72 rounded-full bg-purple-600 top-25 left-25 opacity-30 blur-xl mix-blend-multiply animate-blob"></div>
+        <div className=" absolute h-72 w-72 rounded-full bg-yellow-600 top-20 left-85 opacity-30 blur-xl mix-blend-multiply animate-blob delay-2000"></div>
+        <div className=" absolute h-72 w-72 rounded-full bg-pink-600 bottom-80 right-70 opacity-30 blur-xl mix-blend-multiply animate-blob  delay-40"></div>
         <div className="text-7xl font-bold ">
           <h1 className="text-[#155E75] md:text-8xl anime font-mono">
             take feedback with{" "}
