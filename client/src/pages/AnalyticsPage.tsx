@@ -118,6 +118,7 @@ export default function AnalyticsPage() {
           className={`border-2 ${avgRatings >= 4 && "bg-green-400"}
             ${avgRatings >= 2 && avgRatings < 4 && "bg-yellow-400 "}
             ${avgRatings <= 1 && "bg-red-600"}
+            ${avgRatings === -1 && `hidden`}
            p-4  m-4  rounded-lg w-40 text-center`}
         >
           <p>
