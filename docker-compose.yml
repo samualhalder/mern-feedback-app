@@ -8,6 +8,16 @@ services:
       ./.env
     depends_on:
       - database
+    develop:
+      watch :
+        - action: sync
+          path: ./api
+          target: ./app/api
+        - action: sync
+          path: ./utils
+          target: ./app/utils
+        - action: rebuild
+          path: package.json
   client:
     build: ./client
     ports:
@@ -17,6 +27,13 @@ services:
     depends_on:
       - server
     command: npm run dev -- --host
+    develop:
+      watch:
+        - action: sync
+          path: ./client/src
+          target: ./app/src
+        - action: rebuild
+          path: ./client/package.json
   database:
     image: mongo:4.0-xenial
     ports:
