@@ -153,7 +153,9 @@ export default function AnalyticsPage() {
               share this page as a testimonial.
             </h3>
             <div className="my-4 flex gap-1 border-2 border-cyan-500 rounded-xl overflow-hidden">
-              <p className="pl-1 py-2 text-white truncate">{shareableURL}</p>
+              <p className="pl-1 py-2 dark:text-white truncate">
+                {shareableURL}
+              </p>
               <Button
                 className=" ring-0 rounded-l-none text-center"
                 onClick={() => {
