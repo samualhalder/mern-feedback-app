@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { postType } from "../components/PostCard";
 import { TfiDirection } from "react-icons/tfi";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { FaShare, FaCheck } from "react-icons/fa";
 import {
   Alert,
   Button,
@@ -13,6 +14,22 @@ import {
   Spinner,
   Textarea,
 } from "flowbite-react";
+
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  RedditIcon,
+  RedditShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
@@ -31,13 +48,17 @@ function Post() {
   const [rating, setRating] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [postDeleteMessage, setPostDeleteMessage] = useState(null);
-  const navigator = useNavigate();
+  const navigation = useNavigate();
   const [answears, setAnswears] = useState<answearType[]>([]);
   const [feedback, setFeedback] = useState("");
   const [isLoadng, setIsLoadng] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setsuccess] = useState<string | null>(null);
   const [openFeedbackMoadal, setOpenFeedbackMoadal] = useState(false);
+  const [openShareModal, setOpenShareModal] = useState(false);
+  const [copiedToclickBoard, setCopiedToclickBoard] = useState(false);
+
+  const shareableURL = window.location.href;
 
   //    create feedback----------->
 
@@ -108,7 +129,7 @@ function Post() {
       );
       const data = await response.json();
       if (response.ok) {
-        navigator("/dashboard?tab=all-posts");
+        navigation("/dashboard?tab=all-posts");
       } else {
         setPostDeleteMessage(data);
       }
@@ -269,7 +290,14 @@ function Post() {
           </Modal>
         }
 
-        {post.userId !== currentUser?._id && (
+        {!currentUser && (
+          <div className="flex gap-3 flex-col">
+            <h1 className="text-xl ">Sign in to give feedback</h1>
+            <Button href="/signin">Sign in</Button>
+          </div>
+        )}
+
+        {currentUser && post.userId !== currentUser?._id && (
           <form
             className="flex flex-col  justify-center items-center gap-3"
             onSubmit={handleSubmit}
@@ -355,7 +383,7 @@ function Post() {
             </div>
             <HR />
             <div className="flex gap-4">
-              <Button onClick={() => navigator(`/post/edit/${postId}`)}>
+              <Button onClick={() => navigation(`/post/edit/${postId}`)}>
                 Edit Post
               </Button>
               <Button color={"red"} onClick={() => setOpenModal(true)}>
@@ -389,6 +417,64 @@ function Post() {
             </Modal>
           </div>
         )}
+
+        {/* Share this post */}
+        <Button onClick={() => setOpenShareModal(true)}>
+          <FaShare size={30} />
+        </Button>
+        <Modal
+          show={openShareModal}
+          size="md"
+          onClose={() => setOpenShareModal(false)}
+          popup
+        >
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                share this page as a testimonial.
+              </h3>
+              <div className="my-4 flex gap-1 border-2 border-cyan-500 rounded-xl overflow-hidden">
+                <p className="pl-1 py-2 text-white truncate">{shareableURL}</p>
+                <Button
+                  className=" ring-0 rounded-l-none text-center"
+                  onClick={() => {
+                    setCopiedToclickBoard(true);
+                    navigator.clipboard.writeText(shareableURL);
+                  }}
+                >
+                  {!copiedToclickBoard ? "Copy" : <FaCheck size={20} />}
+                </Button>
+              </div>
+              <div className="flex justify-center gap-4">
+                <FacebookShareButton url={shareableURL}>
+                  {" "}
+                  <FacebookIcon size={35} round={true} />
+                </FacebookShareButton>
+                <TwitterShareButton url={shareableURL}>
+                  {" "}
+                  <TwitterIcon size={35} round={true} />
+                </TwitterShareButton>
+                <RedditShareButton url={shareableURL}>
+                  {" "}
+                  <RedditIcon size={35} round={true} />
+                </RedditShareButton>
+                <LinkedinShareButton url={shareableURL}>
+                  {" "}
+                  <LinkedinIcon size={35} round={true} />
+                </LinkedinShareButton>
+                <TelegramShareButton url={shareableURL}>
+                  {" "}
+                  <TelegramIcon size={35} round={true} />
+                </TelegramShareButton>
+                <WhatsappShareButton url={shareableURL}>
+                  {" "}
+                  <WhatsappIcon size={35} round={true} />
+                </WhatsappShareButton>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
