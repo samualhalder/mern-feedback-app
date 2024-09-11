@@ -15,16 +15,18 @@ import PostEditPage from "./pages/PostEditPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import FeedbackPage from "./pages/FeedbackPage";
 import FooterComp from "./components/Footer";
+import { useEffect } from "react";
 
 function App() {
   const dispatch = useDispatch();
-
-  checkUser();
-  const storedUser = localStorage.getItem("feedback-user");
-  if (storedUser) dispatch(signInSuccesfull(JSON.parse(storedUser)));
-  else {
-    dispatch(signOut());
-  }
+  useEffect(() => {
+    checkUser();
+    const storedUser = localStorage.getItem("feedback-user");
+    if (storedUser) dispatch(signInSuccesfull(JSON.parse(storedUser)));
+    else {
+      dispatch(signOut());
+    }
+  }, []);
 
   return (
     <div className="dark:bg-[#0F0F0F]">

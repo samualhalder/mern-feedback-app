@@ -8,7 +8,7 @@ function Home() {
   return (
     <div className=" h-screen dark:text-white">
       <div className=" relative w-full h-full p-2 flex flex-col justify-center  items-center overflow-hidden">
-        <div className=" absolute h-72 w-72 rounded-full bg-purple-600 top-25 left-25 opacity-30 blur-xl mix-blend-multiply animate-blob delay-500"></div>
+        <div className=" absolute h-72 w-72 rounded-full bg-purple-600 top-25 left-25 opacity-30 blur-xl mix-blend-multiply animate-blob delay-5000"></div>
         <div className=" absolute h-72 w-72 rounded-full bg-yellow-600 top-20 left-85 opacity-30 blur-xl mix-blend-multiply animate-blob delay-200"></div>
         <div className=" absolute h-72 w-72 rounded-full bg-pink-600 bottom-80 right-70 opacity-30 blur-xl mix-blend-multiply animate-blob  delay-40"></div>
         <div className="text-7xl font-bold ">

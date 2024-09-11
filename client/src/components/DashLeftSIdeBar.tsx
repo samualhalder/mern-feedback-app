@@ -21,10 +21,10 @@ function DashLeftSIdeBar() {
     dispatch(signOut());
   };
 
+  if (!currentUser) {
+    navigate("/");
+  }
   useEffect(() => {
-    if (!currentUser) {
-      navigate("/");
-    }
     const params = new URLSearchParams(location.search);
     const tabValue = params.get("tab");
     setTab(tabValue);

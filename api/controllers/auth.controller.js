@@ -6,12 +6,16 @@ import jwt from "jsonwebtoken";
 //Sihnup
 export const checkUser = async (req, res, next) => {
   const token = req.cookies.acesses_token;
+
   if (!token) {
     return next(errorHandler(400, "no such user."));
   }
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       return next(errorHandler(400, err));
+    }
+    if (!user) {
+      return next(errorHandler(400, "unrthorize."));
     }
     res.status(200).json(user);
   });
