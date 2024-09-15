@@ -138,7 +138,7 @@ export default function AnalyticsPage() {
         ))}
       </div>
       <Button onClick={() => setOpenModal(true)}>
-        <FaShare size={30} />
+        <FaShare size={20} />
       </Button>
       <Modal
         show={openModal}
@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
         <Modal.Body>
           <div className="text-center">
             <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-              share this page as a testimonial.
+              Share this page as a testimonial
             </h3>
             <div className="my-4 flex gap-1 border-2 border-cyan-500 rounded-xl overflow-hidden">
               <p className="pl-1 py-2 dark:text-white truncate">

@@ -389,6 +389,9 @@ function Post() {
               <Button color={"red"} onClick={() => setOpenModal(true)}>
                 Delete post
               </Button>
+              <Button onClick={() => setOpenShareModal(true)}>
+                <FaShare size={20} />
+              </Button>
             </div>
             {postDeleteMessage && <Alert>{postDeleteMessage}</Alert>}
             <Modal
@@ -419,9 +422,7 @@ function Post() {
         )}
 
         {/* Share this post */}
-        <Button onClick={() => setOpenShareModal(true)}>
-          <FaShare size={30} />
-        </Button>
+
         <Modal
           show={openShareModal}
           size="md"
@@ -432,7 +433,7 @@ function Post() {
           <Modal.Body>
             <div className="text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                share this feedback form.
+                Share this feedback form
               </h3>
               <div className="my-4 flex gap-1 border-2 border-cyan-500 rounded-xl overflow-hidden">
                 <p className="pl-1 py-2 dark:text-white truncate">
